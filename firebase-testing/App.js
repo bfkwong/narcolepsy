@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, TextInput, Button, FlatList } from 'react-native';
 import {Constants} from 'expo';
 import * as firebase from 'firebase';
+import { addone } from './test_functions.js';
 
 const config = {
     apiKey: "AIzaSyAe7ExQFhUoIzeeWEhpEEMobVLa6WdwUa8",
@@ -19,9 +20,10 @@ export default class App extends React.Component {
 
     this.state = {
       message: '',
-      messages: []
+      messages: [],
+      add_count: 0
     }
-
+    this.addit = this.addit.bind(this);
     this.addItem = this.addItem.bind(this);
   }
 
@@ -67,6 +69,12 @@ export default class App extends React.Component {
     newMessage.set(this.state.message, () => this.setState({message: ''}))
   }
 
+  addit () {
+  	let x = this.state.add_count;
+  	let y = addone(x);
+  	this.setState({add_count: y});
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -87,6 +95,12 @@ export default class App extends React.Component {
             </View>
           }
           />
+        <View style={styles.halfo}>
+          <Text style={styles.finn}>
+                {this.state.add_count}
+          </Text>
+          <Button title='Add 1 (from external js file)' onPress={this.addit}/>
+        </View>
       </View>
     );
   }
@@ -110,6 +124,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     margin: 5,
     borderRadius: 5
+  },
+  finn: {
+    textAlign: 'center',
+    color: 'blue',
+    fontSize: 20,
+    marginBottom: 5,
+  },
+  halfo: {
+      backgroundColor: 'skyblue',
+      flex: 1,
+      justifyContent: "center",
+      padding: 20,
   },
   listItem: {
     fontSize: 20,
