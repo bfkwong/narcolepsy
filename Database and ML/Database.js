@@ -50,6 +50,7 @@ function initUserData(age, height, weight) {
 
 function enterSleepyNess(time, awakeness) {
     var timeStampMSecs = getMinutesSinceMidnight(time); 
+    console.log(timeStampMSecs);
     database.ref("user/" + userEmail + "/sleepyTime").push({time: timeStampMSecs, awake: awakeness});
 }
 
