@@ -110,7 +110,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#eee',
-    marginTop: Constants.statusBarHeight
+    marginTop: Constants.statusBarHeight,
+    marginBottom: 0
+  },
+  bottombith: {
+    bottom: 0
   },
   mainBar: {
     backgroundColor: 'blue'
@@ -135,6 +139,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 20,
     backgroundColor: '#fff'
+  },
+  filterBox: {
+    flexDirection: 'row',
+    backgroundColor: 'skyblue',
+    height: 75
   },
   txtInput: {
     flex: 1
@@ -169,13 +178,16 @@ import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
 class HomeScreen extends React.Component {
   render() {
     return (
-        /*
-      <View style={}>
-
-      </View>
-        */
       <View style={styles.container}>
-              <FlatList data={["Poop", "Poop the Sequel",
+
+            <View style={styles.filterBox}>
+                <Text style={{color: 'white', fontSize: 25, fontWeight: 'bold', padding: 20}}>
+                Filter by:
+                </Text>
+                <View style={{width: 30, height: 30, backgroundColor: 'red', textAlign: 'center'}}/>
+            </View>
+
+            <FlatList data={["Poop", "Poop the Sequel",
                                 "Poop: Origins", "Poop: Final Frontier"]} //normally data = this.state.messages
                 renderItem={
                   ({item}) =>
@@ -188,8 +200,22 @@ class HomeScreen extends React.Component {
                     </Text>
                   </View>
                 }
-                />
-            </View>
+            />
+
+            <View style={styles.msgBox}>
+                      <TextInput placeholder='Enter Idea'
+                        /*value={this.state.message}
+
+                        Potential here for onPress to switch UIs
+                        or to expand the bar upwards
+
+                        onChangeText={(text) => this.setState({message: text})}*/
+                        style={styles.txtInput}/>
+                      <Button title='Send' /*onPress={this.addItem}*//>
+                    </View>
+
+      </View>
+
     );
   }
 }
