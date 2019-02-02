@@ -37,6 +37,14 @@ function signIn(email, password) {
     return true;
 }
 
+function signOut() {
+    firebase.auth().signOut().then(function() {
+        console.log("Error: Sign out failed");
+    }).catch(function(error) {
+        console.log("Sign out successful");
+    });
+}
+
 function initUserData(age, height, weight) {
     database.ref("user/" + userEmail).set({
         email: userEmail,
