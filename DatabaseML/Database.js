@@ -12,14 +12,23 @@ export let config = {
 firebase.initializeApp(config);
 
 export class Post {
-    constructor(title, score, link) {
+    constructor(title, score, body, author) {
         this.title = link;
         this.score = score;
-        this.link = link;
+        this.body = body;
+        this.author = author;
     }
 }
 
-export function signUp(email, password){
+export function signUp(email, password, age, height, weight){
+// Sign up user
+// PARAMS:  email (string)
+//          password (string)
+//          age (int)
+//          height (float)
+//          weight (float)
+// RETURNS: 1 for failure
+//          0 for success
     userEmail = email.replace(".","");
     firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
         let errorCode = error.code;
@@ -29,73 +38,126 @@ export function signUp(email, password){
     });
     database = firebase.database();
     initiateTrainingModel();
+    initUserData(age, height, weight)
     return true;
 }
 
 export function signIn(email, password) {
+// Sign in user
+// PARAMS:  email (string)
+//          password (string)
+// RETURNS: 1 for failure
+//          0 for success
+
     userEmail = email.replace(".","");
     firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
         let errorCode = error.code;
         let errorMessage = error.message;
         alert(error.message);
-        return false;
+        return 1;
     });
     database = firebase.database();
     initiateTrainingModel();
-    return true;
+    return 0;
 }
 
 export function signOut() {
+// Sign user out
+// PARAMS:  null
+// RETURNS: 1 for failure
+//          0 for success
     firebase.auth().signOut().then(function() {
-        console.log("Error: Sign out failed");
-    }).catch(function(error) {
         console.log("Sign out successful");
+        return 0;
+    }).catch(function(error) {
+        console.log("Error: Sign out failed");
+        return 1;
     });
 }
 
 export function initUserData(age, height, weight) {
-    database.ref("user/" + userEmail).set({
-        email: userEmail,
-        age: age,
-        height: height,
-        weight: weight
-    });
+// Add User Data into database
+// PARAMS:  age (int) - age of user
+//          height (float) - height of user
+//          weight (float) - weight of user
+// RETURNS: 1 for failure
+//          0 for success
+   firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+         database.ref("user/" + userEmail).set({
+            email: userEmail,
+            age: age,
+            height: height,
+            weight: weight
+         });
+         return 0;
+      } else {
+         console.log("Error: User not signed in (initUserData)")
+         return 1;
+      }
+   });
 }
 
 export function enterSleepyNess(time, awakeness) {
-    var timeStampMSecs = getMinutesSinceMidnight(time);
-    console.log(timeStampMSecs);
-    database.ref("user/" + userEmail + "/sleepyTime").push({time: timeStampMSecs, awake: awakeness});
+// Get retrieve when the user is sleepy
+// PARAMS:  Time (JS Time Object) - Current Time
+//          Awakeness (int from 0-100)
+// RETURNS: 1 for failure
+//          0 for success
+   function getMinutesSinceMidnight(d) {
+       let n = (d.getHours()*60) + d.getMinutes();
+       return n;
+   }
+   var timeStampMSecs = getMinutesSinceMidnight(time);
+   console.log(timeStampMSecs);
+   database.ref("user/" + userEmail + "/sleepyTime").push({time: timeStampMSecs, awake: awakeness});
+   return 0;
 }
 
-export function submitCommunityPost(title, score) {
+export function submitCommunityPost(title, score, body) {
+// Send a new community post to the database
+// PARAMS:  Title (String) - The title of the post
+//          Score (int) - The score of the post
+//          Body (String) - The body text of the post
+// RETURNS: 1 for failure
+//          0 for success
+
     let post = new Post(title, score, "");
     database.ref("posts").push(post);
+    return 0;
 }
 
-export function getMinutesSinceMidnight(d) {
-    let n = (d.getHours()*60) + d.getMinutes();
-    return n;
-}
-
-export let allResponses = []
+// Listen for changes in firebase database in 'post'
+export let allResponses;
 export let ssRef = firebase.database().ref('post');
 ssRef.on('value', function(snapshot) {
-   getAllPosts(snapshot.val());
+   // If a change is noticed run the following functions to
+   // do whatever change is necessary to accomodate with database change
+   allResponses = getAllPosts(snapshot.val());
 });
 
 export function getAllPosts(snapshotObj) {
+
+// Takes in firebase snapshot object and return an array
+// of everything inside that snapshot
+// PARAMS: Snapshot Object from Firebase
+// RETURNS: Array of Posts Object from Firebase
+
+   let allResponses = []
    let newObj;
-   let tempLink, tempMessage, tempTitle;
+   let tempBody, tempMessage, tempTitle, tempAuthor;
 
    allResponses = [];
    for (val in snapshotObj) {
-      tempLink = snapshotObj[val]["link"];
+      tempBody = snapshotObj[val]["body"];
       tempScore =  snapshotObj[val]["score"];
       tempTitle = snapshotObj[val]["title"];
-      newObj = new Post(tempTitle, tempScore, tempLink);
+      tempAuthor = snapshotObj[val]["author"]
+      newObj = new Post(tempTitle, tempScore, tempBody);
 
       allResponses.push(newObj);
    }
+   return allResponses;
+
 }
 
