@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
   },
   filterBox: {
     flexDirection: 'row',
-    backgroundColor: 'skyblue',
+    backgroundColor: '#4286f4',
     height: 75
   },
   txtInput: {
