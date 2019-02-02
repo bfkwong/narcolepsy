@@ -14,6 +14,10 @@ const config = {
   };
   firebase.initializeApp(config);
 
+  console.disableYellowBox = true;
+
+  let database = firebase.database();
+
 export class App extends React.Component {
   constructor(props) {
     super(props)
@@ -28,8 +32,7 @@ export class App extends React.Component {
   }
 //
   componentDidMount() {
-    firebase
-      .database()
+    database
       .ref()
       .child("messages")
       .once("value", snapshot => {
@@ -45,8 +48,7 @@ export class App extends React.Component {
         }
       });
 
-    firebase
-      .database()
+    database
       .ref()
       .child("messages")
       .on("child_added", snapshot => {
@@ -63,8 +65,8 @@ export class App extends React.Component {
   addItem () {
     if (!this.state.message) return;
 
-    const newMessage = firebase.database().ref()
-                          .child("messages")
+    const newMessage = firebase.database().ref("messages")
+                     //     .child("messages")
                           .push();
     newMessage.set(this.state.message, () => this.setState({message: ''}))
   }
