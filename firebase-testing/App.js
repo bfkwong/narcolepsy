@@ -28,37 +28,11 @@ export class App extends React.Component {
       add_count: 0
     }
     this.addit = this.addit.bind(this);
+    this.GETSNAPSHOT = this.GETSNAPSHOT.bind(this);
     this.addItem = this.addItem.bind(this);
   }
 //
   componentDidMount() {
-    database
-      .ref()
-      .child("messages")
-      .once("value", snapshot => {
-        const data = snapshot.val()
-        if (snapshot.val()) {
-          const initMessages = [];
-          Object
-            .keys(data)
-            .forEach(message => initMessages.push(data[message]));
-          this.setState({
-            messages: initMessages
-          })
-        }
-      });
-
-    database
-      .ref()
-      .child("messages")
-      .on("child_added", snapshot => {
-        const data = snapshot.val();
-        if (data) {
-          this.setState(prevState => ({
-            messages: [data, ...prevState.messages]
-          }))
-        }
-      })
 
   }
 
@@ -75,6 +49,10 @@ export class App extends React.Component {
   	let x = this.state.add_count;
   	let y = addone(x);
   	this.setState({add_count: y});
+  }
+
+  GETSNAPSHOT () {
+
   }
 
   render() {
@@ -201,6 +179,8 @@ class HomeScreen extends React.Component {
             </Text>
             <View style={{width: 30, height: 30, backgroundColor: 'red', textAlign: 'center'}}/>
         </View>
+
+
 
         <FlatList data={["Poop", "Poop the Sequel",
                             "Poop: Origins", "Poop: Final Frontier"]} //normally data = this.state.messages
