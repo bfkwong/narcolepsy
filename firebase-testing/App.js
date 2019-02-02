@@ -87,7 +87,7 @@ export class App extends React.Component {
         </View>
         <FlatList data={this.state.messages}
           renderItem={
-            ({item}) => 
+            ({item}) =>
             <View style={styles.listItemContainer}>
               <Text style={styles.listItem}>
                 {item}
@@ -109,7 +109,7 @@ export class App extends React.Component {
           <Text style={styles.finn}>
                 {this.state.add_count}
           </Text>
-          
+
           <Button title='Add 1 (from external js file)' onPress={this.addit}/>
         </View>
       </View>
@@ -179,7 +179,7 @@ import { createBottomTabNavigator, createStackNavigator, createAppContainer } fr
 
 class HomeScreen extends React.Component {
   render() {
-    
+
     return (
         /*
       <View style={}>
@@ -214,13 +214,13 @@ class DescriptionScreen extends React.Component {
     const otherParam = navigation.getParam('otherParam', 'some default value');
 
     return (
+
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Settings!</Text>
-        <Text>Title: {JSON.stringify(title)}</Text>
-          <Text>otherParam: {JSON.stringify(otherParam)}</Text>
-        
+        <Text style ={{ color: 'black', fontSize: 30, fontWeight: 'bold' }}>{JSON.parse(JSON.stringify(title)) }</Text>
+          <Text>otherParam: {JSON.parse(JSON.stringify(otherParam))}</Text>//JSON.parse removes double quotes
+
       </View>
-      
+
     );
   }
 }
@@ -287,7 +287,7 @@ export default createAppContainer(
     {
       App: { screen: App },
       Home: { screen: HomeStack },
-      
+
     },
     {
       defaultNavigationOptions: ({ navigation }) => ({
