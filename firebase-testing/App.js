@@ -245,10 +245,10 @@ class DescriptionScreen extends React.Component {
 
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text>Settings!</Text>
-        <Text>Title: {JSON.stringify(title)}</Text>
-        <Text>Rating: {JSON.stringify(rating)}</Text>
-        <Text>Description: {JSON.stringify(description)}</Text>
-        <Text>Catagories: {JSON.stringify(catagories)}</Text>
+        <Text>Title: {JSON.parse(JSON.stringify(title))}</Text>
+        <Text>Rating: {JSON.parse(JSON.stringify(rating))}</Text>
+        <Text>Description: {JSON.parse(JSON.stringify(description))}</Text>
+        <Text>Catagories: {JSON.parse(JSON.stringify(catagories))}</Text>
 
       </View>
 
