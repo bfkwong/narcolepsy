@@ -26,7 +26,7 @@ export default class App extends React.Component {
     this.addit = this.addit.bind(this);
     this.addItem = this.addItem.bind(this);
   }
-
+//
   componentDidMount() {
     firebase
       .database()
