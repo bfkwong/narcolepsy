@@ -117,7 +117,10 @@ const styles = StyleSheet.create({
     bottom: 0
   },
   mainBar: {
-    backgroundColor: 'blue'
+    backgroundColor: '#4286f4',
+    height: 50,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
   score: {
     backgroundColor: 'gold',
@@ -179,6 +182,10 @@ class HomeScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+
+            <View style={styles.mainBar}>
+
+            </View>
 
             <View style={styles.filterBox}>
                 <Text style={{color: 'white', fontSize: 25, fontWeight: 'bold', padding: 20}}>
