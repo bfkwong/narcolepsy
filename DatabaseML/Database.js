@@ -14,7 +14,6 @@ firebase.initializeApp(config);
 function signUp(email, password){
     userEmail = email.replace(".","");
     firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
-        // Handle Errors here.
         let errorCode = error.code;
         let errorMessage = error.message;
         alert(error.message);
@@ -28,7 +27,6 @@ function signUp(email, password){
 function signIn(email, password) {
     userEmail = email.replace(".","");
     firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
-        // Handle Errors here.
         let errorCode = error.code;
         let errorMessage = error.message;
         alert(error.message);
@@ -49,12 +47,13 @@ function initUserData(age, height, weight) {
 }
 
 function enterSleepyNess(time, awakeness) {
-    var timeStampMSecs = getMsSinceMidnight(time); 
+    var timeStampMSecs = getMinutesSinceMidnight(time); 
+    console.log(timeStampMSecs);
     database.ref("user/" + userEmail + "/sleepyTime").push({time: timeStampMSecs, awake: awakeness});
 }
 
-function getMsSinceMidnight(d) {
-    var e = new Date(d);
-    return d - e.setHours(0,0,0,0);
+function getMinutesSinceMidnight(d) {
+    var n = (d.getHours()*60) + d.getMinutes();
+    return n; 
 }
 
