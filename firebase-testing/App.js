@@ -121,7 +121,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#eee',
-    marginTop: Constants.statusBarHeight
+    marginTop: Constants.statusBarHeight,
+    marginBottom: 0
+  },
+  bottombith: {
+    bottom: 0
   },
   mainBar: {
     backgroundColor: 'blue'
@@ -146,6 +150,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 20,
     backgroundColor: '#fff'
+  },
+  filterBox: {
+    flexDirection: 'row',
+    backgroundColor: 'skyblue',
+    height: 75
   },
   txtInput: {
     flex: 1
@@ -178,31 +187,48 @@ import { Ionicons } from '@expo/vector-icons'; // 6.2.2
 import { createBottomTabNavigator, createStackNavigator, createAppContainer } from 'react-navigation';
 
 class HomeScreen extends React.Component {
+  static navigationOptions = { header: null };
   render() {
 
     return (
-        /*
-      <View style={}>
-
-      </View>
-        */
       <View style={styles.container}>
+
+        <View style={styles.filterBox}>
+            <Text style={{color: 'white', fontSize: 25, fontWeight: 'bold', padding: 20}}>
+            Filter by:
+            </Text>
+            <View style={{width: 30, height: 30, backgroundColor: 'red', textAlign: 'center'}}/>
+        </View>
+
         <FlatList data={["Poop", "Poop the Sequel",
-                          "Poop: Origins", "Poop: Final Frontier"]} //normally data = this.state.messages
-          renderItem={
-            ({item}) =>
-            <View style={styles.idea}>
-              <Text style={styles.listItem}>
-                {item}
-              </Text>
-              <Text style={styles.score}>
-                23
-              </Text>
-            </View>
-          }
-          />
+                            "Poop: Origins", "Poop: Final Frontier"]} //normally data = this.state.messages
+            renderItem={
+              ({item}) =>
+              <View style={styles.idea}>
+                <Text style={styles.listItem}>
+                  {item}
+                </Text>
+                <Text style={styles.score}>
+                  23
+                </Text>
+              </View>
+            }
+        />
+
+        <View style={styles.msgBox}>
+                  <TextInput placeholder='Enter Idea'
+                    /*value={this.state.message}
+
+                    Potential here for onPress to switch UIs
+                    or to expand the bar upwards
+
+                    onChangeText={(text) => this.setState({message: text})}*/
+                    style={styles.txtInput}/>
+                  <Button title='Send' /*onPress={this.addItem}*//>
+                </View>
 
       </View>
+
     );
   }
 }
@@ -211,13 +237,18 @@ class DescriptionScreen extends React.Component {
   render() {
     const { navigation } = this.props;
     const title = navigation.getParam('title', 'NO-ID');
-    const otherParam = navigation.getParam('otherParam', 'some default value');
+    const rating = navigation.getParam('rating', '99');
+    const description = navigation.getParam('description', 'TEST DESCRIPTION');
+    const catagories = navigation.getParam('catagories', [1,0,1]);
 
     return (
 
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style ={{ color: 'black', fontSize: 30, fontWeight: 'bold' }}>{JSON.parse(JSON.stringify(title)) }</Text>
-          <Text>otherParam: {JSON.parse(JSON.stringify(otherParam))}</Text>//JSON.parse removes double quotes
+        <Text>Settings!</Text>
+        <Text>Title: {JSON.stringify(title)}</Text>
+        <Text>Rating: {JSON.stringify(rating)}</Text>
+        <Text>Description: {JSON.stringify(description)}</Text>
+        <Text>Catagories: {JSON.stringify(catagories)}</Text>
 
       </View>
 
@@ -278,7 +309,7 @@ const getTabBarIcon = (navigation, focused, tintColor) => {
 };
 
 const HomeStack = createStackNavigator({
-  Home: HomeScreen,
+  Home: { screen: HomeScreen },
   DescriptionScreen: { screen: DescriptionScreen },
 });
 
