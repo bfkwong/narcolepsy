@@ -150,9 +150,19 @@ import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
 class HomeScreen extends React.Component {
   render() {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Home!</Text>
-      </View>
+      <View style={styles.container}>
+              <FlatList data={["Poop", "Poop the Sequel",
+                                "Poop: Origins", "Poop: Final Frontier"]} //normally data = this.state.messages
+                renderItem={
+                  ({item}) =>
+                  <View style={styles.listItemContainer}>
+                    <Text style={styles.listItem}>
+                      {item}
+                    </Text>
+                  </View>
+                }
+                />
+            </View>
     );
   }
 }
