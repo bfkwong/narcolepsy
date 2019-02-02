@@ -92,6 +92,16 @@ export class App extends React.Component {
               <Text style={styles.listItem}>
                 {item}
               </Text>
+              <Button
+                title="Go to DescriptionScreen"
+                onPress={() => {
+                  /* 1. Navigate to the Details route with params */
+                  this.props.navigation.navigate('DescriptionScreen', {
+                    title: item,
+                    otherParam: 'anything you want here',
+                  });
+                }}
+              />
             </View>
           }
           />
@@ -99,6 +109,7 @@ export class App extends React.Component {
           <Text style={styles.finn}>
                 {this.state.add_count}
           </Text>
+          
           <Button title='Add 1 (from external js file)' onPress={this.addit}/>
         </View>
       </View>
@@ -152,9 +163,9 @@ const styles = StyleSheet.create({
   },
   halfo: {
       backgroundColor: 'skyblue',
-      flex: 1,
       justifyContent: "center",
       padding: 20,
+      bottom: 10,
   },
   listItem: {
     fontSize: 20,
@@ -164,10 +175,11 @@ const styles = StyleSheet.create({
 
 
 import { Ionicons } from '@expo/vector-icons'; // 6.2.2
-import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
+import { createBottomTabNavigator, createStackNavigator, createAppContainer } from 'react-navigation';
 
 class HomeScreen extends React.Component {
   render() {
+    
     return (
         /*
       <View style={}>
@@ -175,31 +187,40 @@ class HomeScreen extends React.Component {
       </View>
         */
       <View style={styles.container}>
-              <FlatList data={["Poop", "Poop the Sequel",
-                                "Poop: Origins", "Poop: Final Frontier"]} //normally data = this.state.messages
-                renderItem={
-                  ({item}) =>
-                  <View style={styles.idea}>
-                    <Text style={styles.listItem}>
-                      {item}
-                    </Text>
-                    <Text style={styles.score}>
-                      23
-                    </Text>
-                  </View>
-                }
-                />
+        <FlatList data={["Poop", "Poop the Sequel",
+                          "Poop: Origins", "Poop: Final Frontier"]} //normally data = this.state.messages
+          renderItem={
+            ({item}) =>
+            <View style={styles.idea}>
+              <Text style={styles.listItem}>
+                {item}
+              </Text>
+              <Text style={styles.score}>
+                23
+              </Text>
             </View>
+          }
+          />
+
+      </View>
     );
   }
 }
 
-class SettingsScreen extends React.Component {
+class DescriptionScreen extends React.Component {
   render() {
+    const { navigation } = this.props;
+    const title = navigation.getParam('title', 'NO-ID');
+    const otherParam = navigation.getParam('otherParam', 'some default value');
+
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text>Settings!</Text>
+        <Text>Title: {JSON.stringify(title)}</Text>
+          <Text>otherParam: {JSON.stringify(otherParam)}</Text>
+        
       </View>
+      
     );
   }
 }
@@ -256,12 +277,16 @@ const getTabBarIcon = (navigation, focused, tintColor) => {
   return <IconComponent name={iconName} size={25} color={tintColor} />;
 };
 
+const HomeStack = createStackNavigator({
+  Home: HomeScreen,
+  DescriptionScreen: { screen: DescriptionScreen },
+});
+
 export default createAppContainer(
   createBottomTabNavigator(
     {
       App: { screen: App },
-      Home: { screen: HomeScreen },
-      Settings: { screen: SettingsScreen },
+      Home: { screen: HomeStack },
       
     },
     {
