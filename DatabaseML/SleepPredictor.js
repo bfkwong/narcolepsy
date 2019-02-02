@@ -31,7 +31,7 @@ function retrainModel(obj) {
     for (var key in obj) {
         sleepiness[obj[key]["time"]] = obj[key]["awake"];
         time[obj[key]["time"]] = obj[key]["time"];
-        for (x = obj[key]["time"]-7; x < obj[key]["time"]+7; x++) {
+        for (x = obj[key]["time"]-0; x < obj[key]["time"]+0; x++) {
             if (x >= 0 && x <1440){
                 sleepiness[x] += obj[key]["awake"]; 
             }
@@ -113,15 +113,20 @@ var range;
 var output;
  
 function graphNetwork() {
+    output = []; 
+    range = [];
+    
     var newModel = new nPolynomialRegression();
     newModel.fit(time, sleepiness, 10);
     
+    var max = Math.max(output);
     range = [];
     output = []; 
-    for (var i = 0; i <= 1440; i+=2) {
+    for (var i = 0; i < 1440; i+=1) {
         range.push(i/1440);
         output.push(newModel.predict(i));
     }
+    
     
     var trace1 = {
       x: range,
@@ -133,7 +138,7 @@ function graphNetwork() {
     var data = [trace1];
     var layout = {
       xaxis: {range: [-0.1, 1.1]},
-      yaxis: {range: [-0.1, 1.1]}
+      yaxis: {range: [-5, 20]}
     };
 
     Plotly.newPlot('myDiv', data, layout, {showSendToCloud: true});

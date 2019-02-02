@@ -14,7 +14,6 @@ firebase.initializeApp(config);
 function signUp(email, password){
     userEmail = email.replace(".","");
     firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
-        // Handle Errors here.
         let errorCode = error.code;
         let errorMessage = error.message;
         alert(error.message);
@@ -28,7 +27,6 @@ function signUp(email, password){
 function signIn(email, password) {
     userEmail = email.replace(".","");
     firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
-        // Handle Errors here.
         let errorCode = error.code;
         let errorMessage = error.message;
         alert(error.message);

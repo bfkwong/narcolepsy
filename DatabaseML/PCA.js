@@ -1,4 +1,5 @@
 class nPCA{
+//    2d input array
     
     constructor(dimension) {
         this.dimension = dimension; 

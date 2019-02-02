@@ -1,4 +1,5 @@
 class nPolynomialRegression {
+    // 1d input array
     
     constructor() {
         this.x = null;
@@ -20,7 +21,12 @@ class nPolynomialRegression {
             console.log("Error: Model not yet trained");
             return; 
         }
-        return this.model.predict(x); 
+        let prediction = this.model.predict(x); 
+        if (prediction < 0) {
+            return 0;
+        } else {
+            return prediction; 
+        }
     }
     
 }
