@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TextInput, Button, FlatList } from 'react-nativ
 import {Constants} from 'expo';
 import * as firebase from 'firebase';
 
+export let allResponses = [];
 export let config = {
     apiKey: "AIzaSyBNPoFd-affJz2oC01SjF_xLoVj_N5LIG8",
     authDomain: "narcolepsy-79d01.firebaseapp.com",
@@ -68,33 +69,33 @@ export class Post {
     }
 }
 
-export let allResponses = [];
-
 export function getAllPosts(snapshotObj) {
    let newObj;
    let tempBody, tempScore, tempTitle, tempAuthor;
-   allResponses = [];
    for (val in snapshotObj) {
       tempBody = snapshotObj[val]["body"];
       tempScore =  snapshotObj[val]["score"];
       tempTitle = snapshotObj[val]["title"];
       tempAuthor = snapshotObj[val]["author"]
+
       newObj = new Post(tempTitle, tempScore, tempBody, tempAuthor);
 
       allResponses.push(newObj);
    }
-   return allResponses;
 }
 
-export function getSnapshot() {
-    allResponses = []
-    let ssRef = firebase.database().ref('posts');
-    ssRef.on('value', function(snapshot) {
-       getAllPosts(snapshot.val());
-    });
-    console.log(allResponses);
-    return allResponses;
-}
+//export function getSnapshot() {
+//    allResponses = []
+//    let ssRef = firebase.database().ref('posts');
+//    ssRef.on('value', function(snapshot) {
+//       var temp = getAllPosts(snapshot.val());
+//    });
+//}
+
+let ssRef = firebase.database().ref('posts');
+ssRef.on('value', function(snapshot) {
+    getAllPosts(snapshot.val());
+});
 
 export function signIn(email, password) {
     userEmail = email.replace(".","");

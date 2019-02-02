@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, TextInput, Button, FlatList } from 'react-native';
 import {Constants} from 'expo';
 import * as firebase from 'firebase';
-import { addone, getAllPosts, getSnapshot, sortPosts, signIn } from './test_functions.js';
+import { addone, getAllPosts, getSnapshot, sortPosts, signIn,allResponses } from './test_functions.js';
 
   console.disableYellowBox = true;
 
@@ -169,10 +169,14 @@ class HomeScreen extends React.Component {
 
     obtainMessages() {
         signIn("1@g.com", "00000000");
-        let snap = getSnapshot();
-        console.log("snap: " +snap);
-        snap = sortPosts(snap);
-        this.setState({messages: snap});
+        if (allResponses.length != 0) {
+            console.log(allResponses);
+            var snap = allResponses.sort(function(a,b) {
+                return a.score - b.score;
+            })
+            this.setState({messages: snap});
+        }
+
     }
 
   render() {
@@ -187,17 +191,15 @@ class HomeScreen extends React.Component {
             <View style={{width: 30, height: 30, backgroundColor: 'red', textAlign: 'center'}}/>
         </View>
 
-
-
         <FlatList data={this.state.messages} //normally data = this.state.messages
             renderItem={
               ({item}) =>
               <View style={styles.idea}>
                 <Text style={styles.listItem}>
-                  {item}
+                  {item.title}
                 </Text>
                 <Text style={styles.score}>
-                  23
+                  {item.score}
                 </Text>
               </View>
             }
