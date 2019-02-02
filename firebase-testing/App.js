@@ -89,7 +89,7 @@ export class App extends React.Component {
         </View>
         <FlatList data={this.state.messages}
           renderItem={
-            ({item}) => 
+            ({item}) =>
             <View style={styles.listItemContainer}>
               <Text style={styles.listItem}>
                 {item}
@@ -111,7 +111,7 @@ export class App extends React.Component {
           <Text style={styles.finn}>
                 {this.state.add_count}
           </Text>
-          
+
           <Button title='Add 1 (from external js file)' onPress={this.addit}/>
         </View>
       </View>
@@ -191,7 +191,7 @@ import { createBottomTabNavigator, createStackNavigator, createAppContainer } fr
 class HomeScreen extends React.Component {
   static navigationOptions = { header: null };
   render() {
-    
+
     return (
       <View style={styles.container}>
 
@@ -244,15 +244,16 @@ class DescriptionScreen extends React.Component {
     const catagories = navigation.getParam('catagories', [1,0,1]);
 
     return (
+
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text>Settings!</Text>
-        <Text>Title: {JSON.stringify(title)}</Text>
-        <Text>Rating: {JSON.stringify(rating)}</Text>
-        <Text>Description: {JSON.stringify(description)}</Text>
-        <Text>Catagories: {JSON.stringify(catagories)}</Text>
-        
+        <Text>Title: {JSON.parse(JSON.stringify(title))}</Text>
+        <Text>Rating: {JSON.parse(JSON.stringify(rating))}</Text>
+        <Text>Description: {JSON.parse(JSON.stringify(description))}</Text>
+        <Text>Catagories: {JSON.parse(JSON.stringify(catagories))}</Text>
+
       </View>
-      
+
     );
   }
 }
@@ -319,7 +320,7 @@ export default createAppContainer(
     {
       App: { screen: App },
       Home: { screen: HomeStack },
-      
+
     },
     {
       defaultNavigationOptions: ({ navigation }) => ({

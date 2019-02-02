@@ -1,7 +1,7 @@
-let database;
-var userEmail;
+export let database;
+export var userEmail;
 
-let config = {
+export let config = {
     apiKey: "AIzaSyBNPoFd-affJz2oC01SjF_xLoVj_N5LIG8",
     authDomain: "narcolepsy-79d01.firebaseapp.com",
     databaseURL: "https://narcolepsy-79d01.firebaseio.com",
@@ -11,7 +11,15 @@ let config = {
 };
 firebase.initializeApp(config);
 
-function signUp(email, password){
+export class Post {
+    constructor(title, score, link) {
+        this.title = link; 
+        this.score = score; 
+        this.link = link; 
+    }
+}
+
+export function signUp(email, password){
     userEmail = email.replace(".","");
     firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
         let errorCode = error.code;
@@ -24,7 +32,7 @@ function signUp(email, password){
     return true;
 }
 
-function signIn(email, password) {
+export function signIn(email, password) {
     userEmail = email.replace(".","");
     firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
         let errorCode = error.code;
@@ -37,7 +45,7 @@ function signIn(email, password) {
     return true;
 }
 
-function signOut() {
+export function signOut() {
     firebase.auth().signOut().then(function() {
         console.log("Error: Sign out failed");
     }).catch(function(error) {
@@ -45,7 +53,7 @@ function signOut() {
     });
 }
 
-function initUserData(age, height, weight) {
+export function initUserData(age, height, weight) {
     database.ref("user/" + userEmail).set({
         email: userEmail,
         age: age,
@@ -54,13 +62,18 @@ function initUserData(age, height, weight) {
     });
 }
 
-function enterSleepyNess(time, awakeness) {
+export function enterSleepyNess(time, awakeness) {
     var timeStampMSecs = getMinutesSinceMidnight(time); 
     console.log(timeStampMSecs);
     database.ref("user/" + userEmail + "/sleepyTime").push({time: timeStampMSecs, awake: awakeness});
 }
 
-function getMinutesSinceMidnight(d) {
+export function submitCommunityPost(title, score) {
+    let post = new Post(title, score, "");
+    database.ref("posts").push(post); 
+}
+
+export function getMinutesSinceMidnight(d) {
     var n = (d.getHours()*60) + d.getMinutes();
     return n; 
 }
