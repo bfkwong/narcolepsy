@@ -11,7 +11,7 @@ export let config = {
 };
 firebase.initializeApp(config);
 
-class Post {
+export class Post {
     constructor(title, score, link) {
         this.title = link; 
         this.score = score; 
@@ -70,7 +70,7 @@ export function enterSleepyNess(time, awakeness) {
 
 export function submitCommunityPost(title, score) {
     let post = new Post(title, score, "");
-    database.ref("user/posts").push(post); 
+    database.ref("posts").push(post); 
 }
 
 export function getMinutesSinceMidnight(d) {
