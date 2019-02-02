@@ -28,7 +28,6 @@ export class App extends React.Component {
       add_count: 0
     }
     this.addit = this.addit.bind(this);
-    this.GETSNAPSHOT = this.GETSNAPSHOT.bind(this);
     this.addItem = this.addItem.bind(this);
   }
 //
@@ -49,10 +48,6 @@ export class App extends React.Component {
   	let x = this.state.add_count;
   	let y = addone(x);
   	this.setState({add_count: y});
-  }
-
-  GETSNAPSHOT () {
-
   }
 
   render() {
@@ -168,6 +163,27 @@ import { createBottomTabNavigator, createStackNavigator, createAppContainer } fr
 
 class HomeScreen extends React.Component {
   static navigationOptions = { header: null };
+
+  constructor(props) {
+      super(props)
+
+      this.state = {
+        messages: []
+      }
+      this.obtainMessages = this.obtainMessages.bind(this);
+    }
+  //
+    componentDidMount() {
+        this.obtainMessages();
+    }
+
+    obtainMessages() {
+        let snap = getSnapshot();
+        let posts = getAllPosts(snap);
+        posts = sortPosts(posts);
+        this.setState({messages: posts});
+    }
+
   render() {
 
     return (
