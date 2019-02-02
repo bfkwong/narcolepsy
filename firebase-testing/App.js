@@ -211,13 +211,17 @@ class DescriptionScreen extends React.Component {
   render() {
     const { navigation } = this.props;
     const title = navigation.getParam('title', 'NO-ID');
-    const otherParam = navigation.getParam('otherParam', 'some default value');
+    const rating = navigation.getParam('rating', '99');
+    const description = navigation.getParam('description', 'TEST DESCRIPTION');
+    const catagories = navigation.getParam('catagories', [1,0,1]);
 
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text>Settings!</Text>
         <Text>Title: {JSON.stringify(title)}</Text>
-          <Text>otherParam: {JSON.stringify(otherParam)}</Text>
+        <Text>Rating: {JSON.stringify(rating)}</Text>
+        <Text>Description: {JSON.stringify(description)}</Text>
+        <Text>Catagories: {JSON.stringify(catagories)}</Text>
         
       </View>
       
