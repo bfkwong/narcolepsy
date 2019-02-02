@@ -13,9 +13,9 @@ firebase.initializeApp(config);
 
 export class Post {
     constructor(title, score, link) {
-        this.title = link; 
-        this.score = score; 
-        this.link = link; 
+        this.title = link;
+        this.score = score;
+        this.link = link;
     }
 }
 
@@ -28,7 +28,7 @@ export function signUp(email, password){
         return false;
     });
     database = firebase.database();
-    initiateTrainingModel(); 
+    initiateTrainingModel();
     return true;
 }
 
@@ -41,7 +41,7 @@ export function signIn(email, password) {
         return false;
     });
     database = firebase.database();
-    initiateTrainingModel(); 
+    initiateTrainingModel();
     return true;
 }
 
@@ -63,18 +63,39 @@ export function initUserData(age, height, weight) {
 }
 
 export function enterSleepyNess(time, awakeness) {
-    var timeStampMSecs = getMinutesSinceMidnight(time); 
+    var timeStampMSecs = getMinutesSinceMidnight(time);
     console.log(timeStampMSecs);
     database.ref("user/" + userEmail + "/sleepyTime").push({time: timeStampMSecs, awake: awakeness});
 }
 
 export function submitCommunityPost(title, score) {
     let post = new Post(title, score, "");
-    database.ref("posts").push(post); 
+    database.ref("posts").push(post);
 }
 
 export function getMinutesSinceMidnight(d) {
-    var n = (d.getHours()*60) + d.getMinutes();
-    return n; 
+    let n = (d.getHours()*60) + d.getMinutes();
+    return n;
+}
+
+export let allResponses = []
+export let ssRef = firebase.database().ref('post');
+ssRef.on('value', function(snapshot) {
+   getAllPosts(snapshot.val());
+});
+
+export function getAllPosts(snapshotObj) {
+   let newObj;
+   let tempLink, tempMessage, tempTitle;
+
+   allResponses = [];
+   for (val in snapshotObj) {
+      tempLink = snapshotObj[val]["link"];
+      tempScore =  snapshotObj[val]["score"];
+      tempTitle = snapshotObj[val]["title"];
+      newObj = new Post(tempTitle, tempScore, tempLink);
+
+      allResponses.push(newObj);
+   }
 }
 
