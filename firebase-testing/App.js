@@ -2,17 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, TextInput, Button, FlatList } from 'react-native';
 import {Constants} from 'expo';
 import * as firebase from 'firebase';
-import { addone } from './test_functions.js';
-
-const config = {
-    apiKey: "AIzaSyAe7ExQFhUoIzeeWEhpEEMobVLa6WdwUa8",
-    authDomain: "fir-testing-fe210.firebaseapp.com",
-    databaseURL: "https://fir-testing-fe210.firebaseio.com",
-    projectId: "fir-testing-fe210",
-    storageBucket: "",
-    messagingSenderId: "113944131587"
-  };
-  firebase.initializeApp(config);
+import { addone, getAllPosts, getSnapshot, sortPosts, signIn } from './test_functions.js';
 
   console.disableYellowBox = true;
 
@@ -178,10 +168,11 @@ class HomeScreen extends React.Component {
     }
 
     obtainMessages() {
+        signIn("1@g.com", "00000000");
         let snap = getSnapshot();
-        let posts = getAllPosts(snap);
-        posts = sortPosts(posts);
-        this.setState({messages: posts});
+        console.log("snap: " +snap);
+        snap = sortPosts(snap);
+        this.setState({messages: snap});
     }
 
   render() {
@@ -198,8 +189,7 @@ class HomeScreen extends React.Component {
 
 
 
-        <FlatList data={["Poop", "Poop the Sequel",
-                            "Poop: Origins", "Poop: Final Frontier"]} //normally data = this.state.messages
+        <FlatList data={this.state.messages} //normally data = this.state.messages
             renderItem={
               ({item}) =>
               <View style={styles.idea}>

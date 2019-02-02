@@ -99,3 +99,12 @@ export function getAllPosts(snapshotObj) {
    }
 }
 
+export function getSnapshot() {
+    let allResponses = []
+    let ssRef = firebase.database().ref('post');
+    ssRef.on('value', function(snapshot) {
+       getAllPosts(snapshot.val());
+    });
+    return allResponses;
+}
+

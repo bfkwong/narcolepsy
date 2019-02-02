@@ -1,6 +1,17 @@
 import React from 'react';
 import { StyleSheet, Text, View, TextInput, Button, FlatList } from 'react-native';
 import {Constants} from 'expo';
+import * as firebase from 'firebase';
+
+export let config = {
+    apiKey: "AIzaSyBNPoFd-affJz2oC01SjF_xLoVj_N5LIG8",
+    authDomain: "narcolepsy-79d01.firebaseapp.com",
+    databaseURL: "https://narcolepsy-79d01.firebaseio.com",
+    projectId: "narcolepsy-79d01",
+    storageBucket: "narcolepsy-79d01.appspot.com",
+    messagingSenderId: "914058585382"
+};
+firebase.initializeApp(config);
 
 export function addone(x) {
   return x + 1;
@@ -46,4 +57,53 @@ export function sortPosts(messages) {
             result = binarySearchInsertion(post, result, 0, result.length);
     }
     return result;
+}
+
+export class Post {
+    constructor(title, score, body, author) {
+        this.title = title;
+        this.score = score;
+        this.body = body;
+        this.author = author;
+    }
+}
+
+export let allResponses = [];
+
+export function getAllPosts(snapshotObj) {
+   let newObj;
+   let tempBody, tempScore, tempTitle, tempAuthor;
+   allResponses = [];
+   for (val in snapshotObj) {
+      tempBody = snapshotObj[val]["body"];
+      tempScore =  snapshotObj[val]["score"];
+      tempTitle = snapshotObj[val]["title"];
+      tempAuthor = snapshotObj[val]["author"]
+      newObj = new Post(tempTitle, tempScore, tempBody, tempAuthor);
+
+      allResponses.push(newObj);
+   }
+   return allResponses;
+}
+
+export function getSnapshot() {
+    allResponses = []
+    let ssRef = firebase.database().ref('posts');
+    ssRef.on('value', function(snapshot) {
+       getAllPosts(snapshot.val());
+    });
+    console.log(allResponses);
+    return allResponses;
+}
+
+export function signIn(email, password) {
+    userEmail = email.replace(".","");
+    firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+        let errorCode = error.code;
+        let errorMessage = error.message;
+        alert(error.message);
+        return false;
+    });
+    database = firebase.database();
+    return true;
 }
