@@ -1,11 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, TextInput, Button, FlatList, Dimensions, Alert } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TextInput, FlatList, Dimensions, Alert } from 'react-native';
 import {Constants} from 'expo';
 import * as firebase from 'firebase';
 import { addone, getAllPosts, getSnapshot, sortPosts, signIn,allResponses, enterSleepyNess } from './test_functions.js';
 import Slider from "react-native-slider";
 import Icon from '@expo/vector-icons/FontAwesome';
-import { Divider, Header } from 'react-native-elements';
+import { Divider, Header, Button } from 'react-native-elements';
 import PureChart from 'react-native-pure-chart';
 
 
@@ -322,7 +322,7 @@ export class App extends React.Component {
                 {item}
               </Text>
               <Button
-                title="Full description"
+                title=<Ionicons name="ios-list" size={25} color="black"/>
                 onPress={() => {
                   /* 1. Navigate to the Details route with params */
                   this.props.navigation.navigate('DescriptionScreen', {
@@ -491,16 +491,13 @@ class HomeScreen extends React.Component {
             Filter by:
             </Text>
             <View style={{  width: 45, height: 38, backgroundColor: 'red', margin:5, marginTop: 20}}>
-            <Button  title="O" color = 'red'/>
+            <Button  title=<Ionicons name="ios-baseball" size={25} color="red"/> backgroundColor = 'red'/>
             </View>
-            <View style={{ width: 45, height: 38, backgroundColor: 'orange',margin: 5, marginTop:20, textAlign: 'center'}}>
-            <Button  title="I" color = 'orange'/>
+            <View style={{ width: 40, height: 35, backgroundColor: 'orange',margin: 5, marginTop:20, textAlign: 'center'}}>
+            <Button  title=<Ionicons name="ios-flash" size={25} color="orange"/>  color = 'orange'/>
             </View>
             <View style={{ width: 45, height: 38, backgroundColor: 'green',margin: 5, marginTop:20, textAlign: 'center'}}>
-            <Button  title="P" color = 'green'/>
-            </View>
-            <View style={{ width: 45, height: 38, backgroundColor: 'purple',margin: 5, marginTop:20, textAlign: 'center'}}>
-            <Button  title="A" color = 'purple'/>
+            <Button title=<Ionicons name="ios-bulb" size={25} color="gold"/>  color = 'green'/>
             </View>
     </View>
 
@@ -514,7 +511,7 @@ class HomeScreen extends React.Component {
                   {item.title}
                 </Text>
                 <Button
-                title="Full Description"
+                title=<Ionicons name="ios-list" size={25} color="black"/> 
                 onPress={() => {
                   /* 1. Navigate to the Details route with params */
                   this.props.navigation.navigate('DescriptionScreen', {
@@ -526,6 +523,7 @@ class HomeScreen extends React.Component {
                 }}
               />
                 <Text style={styles.score}>
+                <Ionicons name="ios-star" size={25} color="white"/>
                   {item.score}
                 </Text>
               </View>
