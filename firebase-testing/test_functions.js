@@ -147,3 +147,11 @@ export function enterSleepyNess(time, awakeness) {
     console.log("Time: " + timeStampMSecs);
     database.ref("user/" + userEmail + "/sleepyTime").push({time: timeStampMSecs, awake: awakeness});
 }
+
+export function submitCommunityPost(title, body, score, author, filters) {
+    let post = new Post(title, body, score, author, filters);
+
+
+    database.ref("posts").push(post);
+    return 0;
+}
