@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, TextInput, Button, FlatList } from 'react-native';
 import {Constants} from 'expo';
 import * as firebase from 'firebase';
+import regression from 'regression';
 
 export let userEmail = "";
 export let allResponses = [];
@@ -17,6 +18,8 @@ firebase.initializeApp(config);
 export let database = firebase.database();
 export let sleepiness = [];
 export let time = [];
+export let sampleData = [20,2,0,0,6];
+export let training = [];
 
 export function addone(x) {
   return x + 1;
@@ -93,7 +96,7 @@ postRefernce.on('value', function(snapshot) {
     getAllPosts(snapshot.val());
 });
 
-let userReference = firebase.database().ref('user/' + userEmail + '/sleepyTime');
+let userReference = firebase.database().ref('user/12@gcom' + '/sleepyTime');
 userReference.on('value', function(snapshot) {
     retrainModel(snapshot.val());
     console.log("graph Network");
@@ -112,36 +115,57 @@ export function signIn(email, password) {
     return true;
 }
 
+export let result;
+export let max;
+
 export function getGraphOutput() {
+
     output = [];
     range = [];
 
-    var newModel = new nPolynomialRegression();
-    newModel.fit(time, sleepiness, 10);
+    result = regression.polynomial(training, { order: 5 });
 
-    var max = Math.max(output);
-    range = [];
-    output = [];
     for (var i = 0; i < 1440; i+=1) {
         range.push(i/1440);
-        output.push(newModel.predict(i));
+        output.push(result.predict(i));
     }
+    max = Math.max(output);
+    console.log(Math.max(output))
+
+    let increment = 240;
+    let prev = 0;
+    for(var x = increment; x < output.length; x+=increment) {
+      let mean = 0;
+      for (var y = prev; y < increment; y++) {
+         mean += output[y][0];
+      }
+      mean /= 240;
+      console.log(mean);
+      sampleData.push(mean);
+      prev = x + increment;
+   }
 }
 
 export function retrainModel(obj) {
+    for (var x = 0; x < 1440; x++) {
+      sleepiness[x] = 0;
+      time[x] = x;
+      training[x] = [x,0];
+   }
     for (var key in obj) {
         sleepiness[obj[key]["time"]] = obj[key]["awake"];
         time[obj[key]["time"]] = obj[key]["time"];
+        training[obj[key]["time"]] = [obj[key]["time"], obj[key]["awake"]];
         for (x = obj[key]["time"]-0; x < obj[key]["time"]+0; x++) {
             if (x >= 0 && x <1440){
                 sleepiness[x] += obj[key]["awake"];
             }
         }
     }
+    getGraphOutput();
 }
 
 export function enterSleepyNess(time, awakeness) {
     var timeStampMSecs = (time.getHours()*60) + time.getMinutes();
-    console.log("Time: " + timeStampMSecs);
     database.ref("user/" + userEmail + "/sleepyTime").push({time: timeStampMSecs, awake: awakeness});
 }

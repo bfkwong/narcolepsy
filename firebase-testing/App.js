@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, ScrollView, TextInput, Button, FlatList, Dimensions, Alert } from 'react-native';
 import {Constants} from 'expo';
 import * as firebase from 'firebase';
-import { addone, getAllPosts, getSnapshot, sortPosts, signIn,allResponses, enterSleepyNess } from './test_functions.js';
+import { addone, getAllPosts, getSnapshot, sortPosts, signIn,allResponses, enterSleepyNess, sampleData, result, max } from './test_functions.js';
 import Slider from "react-native-slider";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Divider, Header } from 'react-native-elements';
@@ -17,7 +17,10 @@ export class HS extends React.Component {
     constructor() {
         super();
         this.submitSleep = this.submitSleep.bind(this);
-        this.state = { value: 50 };
+        this.state = {
+           value: 50,
+           percent: 50
+        };
     }
 
     submitSleep() {
@@ -25,6 +28,8 @@ export class HS extends React.Component {
         console.log("This Value" + this.state.value);
         console.log("This Time" + time);
         enterSleepyNess(time, this.state.value);
+        var out = result.predict(time.getHours()*60 + time.getMinutes())[0];
+        this.setState({percent: (out/500)*100, value: 50});
         Alert.alert(
           'SUBMITTED',
           'Data entered at ' + time.getHours() + ':' + time.getMinutes() + ' GMT for ' + this.state.value + '% sleepiness.',
@@ -41,7 +46,6 @@ export class HS extends React.Component {
     }
 
     render() {
-        let sampleData = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 
         return (
             <View>
@@ -52,10 +56,10 @@ export class HS extends React.Component {
                     rightComponent={{ icon: 'home', color: '#fff' }}
                 />
                 <Text style={HSStyles.nextPLapse}>
-                    NEXT PREDICTED LAPSE
+                    CURRENT PREDICTED TIREDNESS
                 </Text>
                 <Text style={HSStyles.lapseTime}>
-                   9:45 PM
+                   {this.state.percent}%
                 </Text>
                 <Icon
                     style={HSStyles.moonImage}
@@ -82,7 +86,6 @@ export class HS extends React.Component {
                       type="Submit"
                       onPress={this.submitSleep}
                     />
-                    <Text>Value: {this.state.value}</Text>
                 </View>
             </View>
         );
@@ -235,84 +238,44 @@ class SubmissionScreen extends React.Component {
   }
 }
 
-
 export class App extends React.Component {
 
-  constructor(props) {
-    super(props)
+   constructor() {
+      super();
+      this.state = {
+         sd: [0,0,0,0,0]
+      }
+   }
 
-    this.state = {
-      message: '',
-      messages: [],
-      add_count: 0
-    }
-    this.addit = this.addit.bind(this);
-    this.addItem = this.addItem.bind(this);
-  }
-//
-  componentDidMount() {
+   updateGraph() {
+      console.log(sampleData + "**********");
+   }
 
-  }
 
-  addItem () {
-    if (!this.state.message) return;
+   render() {
+      return (
+         <View style={styles.graphContainer}>
+            <PureChart
+               data={sampleData}
+               type='line'
+               height={200}/>
+            <Button
+               title='SUBMIT'
+               onPress={this.updateGraph}/>
+         </View>
+        );
 
-    const newMessage = firebase.database().ref("messages")
-                     //     .child("messages")
-                          .push();
-    newMessage.set(this.state.message, () => this.setState({message: ''}))
-  }
+   }
 
-  addit () {
-  	let x = this.state.add_count;
-  	let y = addone(x);
-  	this.setState({add_count: y});
-  }
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <View style={styles.msgBox}>
-          <TextInput placeholder='Enter your message'
-            value={this.state.message}
-            onChangeText={(text) => this.setState({message: text})}
-            style={styles.txtInput}/>
-          <Button title='Send' onPress={this.addItem}/>
-        </View>
-        <FlatList data={this.state.messages}
-          renderItem={
-            ({item}) =>
-            <View style={styles.listItemContainer}>
-              <Text style={styles.listItem}>
-                {item}
-              </Text>
-              <Button
-                title="Go to DescriptionScreen"
-                onPress={() => {
-                  /* 1. Navigate to the Details route with params */
-                  this.props.navigation.navigate('DescriptionScreen', {
-                    title: item,
-                    otherParam: 'anything you want here',
-                  });
-                }}
-              />
-            </View>
-          }
-          />
-        <View style={styles.halfo}>
-          <Text style={styles.finn}>
-                {this.state.add_count}
-          </Text>
-
-          <Button title='Add 1 (from external js file)' onPress={this.addit}/>
-        </View>
-      </View>
-    );
-  }
 }
 
 const styles = StyleSheet.create({
 
+  graphContainer: {
+    top: 200,
+    marginLeft: 20,
+    marginRight: 20
+  },
   container: {
     flex: 1,
     backgroundColor: '#eee',

@@ -1,7 +1,7 @@
-export let database;
-export var userEmail;
+ let database;
+ var userEmail;
 
-export let config = {
+ let config = {
     apiKey: "AIzaSyBNPoFd-affJz2oC01SjF_xLoVj_N5LIG8",
     authDomain: "narcolepsy-79d01.firebaseapp.com",
     databaseURL: "https://narcolepsy-79d01.firebaseio.com",
@@ -11,7 +11,7 @@ export let config = {
 };
 firebase.initializeApp(config);
 
-export class Post {
+ class Post {
     constructor(title, body, score, author) {
         this.title = title;
         this.body = body;
@@ -20,7 +20,7 @@ export class Post {
     }
 }
 
-export function signUp(email, password){
+ function signUp(email, password){
     userEmail = email.replace(".","");
     firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
         let errorCode = error.code;
@@ -33,7 +33,7 @@ export function signUp(email, password){
     return true;
 }
 
-export function signIn(email, password) {
+ function signIn(email, password) {
     userEmail = email.replace(".","");
     firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
         let errorCode = error.code;
@@ -42,11 +42,11 @@ export function signIn(email, password) {
         return false;
     });
     database = firebase.database();
-    initiateTrainingModel();
+//    initiateTrainingModel();
     return true;
 }
 
-export function signOut() {
+ function signOut() {
     firebase.auth().signOut().then(function() {
         console.log("Error: Sign out failed");
     }).catch(function(error) {
@@ -54,7 +54,7 @@ export function signOut() {
     });
 }
 
-export function initUserData(age, height, weight) {
+ function initUserData(age, height, weight) {
     database.ref("user/" + userEmail).set({
         email: userEmail,
         age: age,
@@ -63,29 +63,29 @@ export function initUserData(age, height, weight) {
     });
 }
 
-export function enterSleepyNess(time, awakeness) {
+ function enterSleepyNess(time, awakeness) {
     var timeStampMSecs = getMinutesSinceMidnight(time);
     console.log(timeStampMSecs);
     database.ref("user/" + userEmail + "/sleepyTime").push({time: timeStampMSecs, awake: awakeness});
 }
 
-export function submitCommunityPost(title, body, score, author) {
+ function submitCommunityPost(title, body, score, author) {
     let post = new Post(title, body, score, author);
     database.ref("posts").push(post);
 }
 
-export function getMinutesSinceMidnight(d) {
+ function getMinutesSinceMidnight(d) {
     let n = (d.getHours()*60) + d.getMinutes();
     return n;
 }
 
-export let allResponses = []
-export let ssRef = firebase.database().ref('post');
+ let allResponses = []
+ let ssRef = firebase.database().ref('post');
 ssRef.on('value', function(snapshot) {
    getAllPosts(snapshot.val());
 });
 
-export function getAllPosts(snapshotObj) {
+ function getAllPosts(snapshotObj) {
    let newObj;
    let tempBody, tempScore, tempTitle, tempAuthor;
    for (val in snapshotObj) {
