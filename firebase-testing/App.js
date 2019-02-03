@@ -2,7 +2,9 @@ import React from 'react';
 import { StyleSheet, Text, View, ScrollView, TextInput, FlatList, Dimensions, Alert } from 'react-native';
 import {Constants} from 'expo';
 import * as firebase from 'firebase';
-import { userEmail, submitCommunityPost, addone, getAllPosts, getSnapshot, sortPosts, signIn,allResponses, enterSleepyNess } from './test_functions.js';
+
+import { submitCommunityPost, addone, getAllPosts, getSnapshot, sortPosts, signIn,allResponses, enterSleepyNess, sampleData, result, max } from './test_functions.js';
+
 import Slider from "react-native-slider";
 import Icon from '@expo/vector-icons/FontAwesome';
 import { Divider, Header, Button, CheckBox } from 'react-native-elements';
@@ -17,7 +19,10 @@ export class HS extends React.Component {
     constructor() {
         super();
         this.submitSleep = this.submitSleep.bind(this);
-        this.state = { value: 50 };
+        this.state = {
+           value: 50,
+           percent: 50
+        };
     }
 
     submitSleep() {
@@ -25,6 +30,8 @@ export class HS extends React.Component {
         console.log("This Value" + this.state.value);
         console.log("This Time" + time);
         enterSleepyNess(time, this.state.value);
+        var out = result.predict(time.getHours()*60 + time.getMinutes())[0];
+        this.setState({percent: (out/500)*100, value: 50});
         Alert.alert(
           'SUBMITTED',
           'Data entered at ' + time.getHours() + ':' + time.getMinutes() + ' GMT for ' + this.state.value + '% sleepiness.',
@@ -41,17 +48,18 @@ export class HS extends React.Component {
     }
 
     render() {
-        let sampleData = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 
         return (
 
-            <ScrollView>
+
+            <View>
+
 
                 <Text style={HSStyles.nextPLapse}>
-                    NEXT PREDICTED LAPSE
+                    CURRENT PREDICTED TIREDNESS
                 </Text>
                 <Text style={HSStyles.lapseTime}>
-                   9:45 PM
+                   {this.state.percent}%
                 </Text>
                 <Icon
                     style={HSStyles.moonImage}
@@ -76,22 +84,9 @@ export class HS extends React.Component {
                     <Button
                       title="Submit"
                       type="Submit"
-                      onPress={this.submitSleep}
-                    />
-                    <Text>Value: {this.state.value}</Text>
+                      onPress={this.submitSleep}/>
                 </View>
-                <Divider style={HSStyles.divider} />
-                <View style={HSStyles.graphView}>
-                    <Text style={HSStyles.sleepPatternTitle}>
-                        YOUR SLEEP PATTERN
-                    </Text>
-                    <PureChart
-                        data={sampleData}
-                        type='line'
-                        height={200}/>
-                </View>
-
-            </ScrollView>
+          </View>
         );
     }
 
@@ -220,7 +215,7 @@ class SubmissionScreen extends React.Component {
         <Divider style={{ backgroundColor: 'gray' }}/>
 
         <View style={{flex: 1, flexDirection: 'row'}}>
-          
+
           <CheckBox
             title='Outdoors'
             checked={this.state.outdoors}
@@ -261,39 +256,35 @@ class SubmissionScreen extends React.Component {
 }
 
 
-
 export class App extends React.Component {
 
-  constructor(props) {
-    super(props)
+   constructor() {
+      super();
+      this.state = {
+         sd: [0,0,0,0,0]
+      }
+   }
 
-    this.state = {
-      message: '',
-      messages: [],
-      add_count: 0
-    }
-    this.addit = this.addit.bind(this);
-    this.addItem = this.addItem.bind(this);
-  }
-//
-  componentDidMount() {
+   updateGraph() {
+      console.log(sampleData + "**********");
+   }
 
-  }
 
-  addItem () {
-    if (!this.state.message) return;
+   render() {
+      return (
+         <View style={styles.graphContainer}>
+            <PureChart
+               data={sampleData}
+               type='line'
+               height={200}/>
+            <Button
+               title='SUBMIT'
+               onPress={this.updateGraph}/>
+         </View>
+        );
 
-    const newMessage = firebase.database().ref("messages")
-                     //     .child("messages")
-                          .push();
-    newMessage.set(this.state.message, () => this.setState({message: ''}))
-  }
+   }
 
-  addit () {
-  	let x = this.state.add_count;
-  	let y = addone(x);
-  	this.setState({add_count: y});
-  }
 
   render() {
     return (
@@ -339,6 +330,11 @@ export class App extends React.Component {
 
 const styles = StyleSheet.create({
 
+  graphContainer: {
+    top: 200,
+    marginLeft: 20,
+    marginRight: 20
+  },
   container: {
     flex: 1,
     backgroundColor: '#eee',
@@ -515,12 +511,13 @@ class HomeScreen extends React.Component {
             renderItem={
               ({item}) =>
               <View style={styles.idea}>
-                
+
                 <Button
                 title={item.title}
                 onPress={() => {
                   /* 1. Navigate to the Details route with params */
                   this.props.navigation.navigate('DescriptionScreen', {
+                    author:item.author,
                     title: item.title,
                     rating: item.score,
                     description: item.body,
@@ -536,7 +533,7 @@ class HomeScreen extends React.Component {
             }
         />
 
-        
+
 
       </View>
 
@@ -597,8 +594,22 @@ export class LoginScreen extends React.Component {
 }
 
 class DescriptionScreen extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      rating: 0,
+    }
+    this.halfsend = this.halfsend.bind(this);
+  }
+  halfsend (title,description, author, catagories) {
+      this.setState({rating: this.state.rating+1});
+      console.log(this.state.rating);
+      submitCommunityPost(title, this.state.rating, description, author, catagories);
+    }
   render() {
     const { navigation } = this.props;
+    const author = navigation.getParam('author','billy');
     const title = navigation.getParam('title', 'NO-ID');
     const rating = navigation.getParam('rating', '99');
     const description = navigation.getParam('description', 'TEST DESCRIPTION');
@@ -609,8 +620,11 @@ class DescriptionScreen extends React.Component {
 
       <View style = {{ flex: 1, padding: 20, backgroundColor: 'skyblue',  }}>
       <View style = {{flexDirection: 'row', backgroundColor: 'gold',fontSize: 25,textAlign: 'right', alignSelf: 'flex-end'}}>
+      <Button
+      title = <Ionicons name="ios-arrow-up" size={25} color="black"/>
+      onPress ={() => this.halfsend(title,description, author, catagories)}/>
       <Ionicons name="ios-star" size={25} color="black"/>
-      <Text style = {{fontSize:25}}>{JSON.parse(JSON.stringify(rating))}</Text>
+      <Text style = {{fontSize:25}}>{(JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(rating))+this.state.rating)))}</Text>
       </View>
       <View style = {styles.descripBox}>
         <Text style={{ backgroundColor: 'skyblue', margin: 10,  color: 'black', fontSize: 35, fontWeight: 'bold' }}>{JSON.parse(JSON.stringify(title))}</Text>
@@ -676,7 +690,7 @@ const getTabBarIcon = (navigation, focused, tintColor) => {
 
 const HomeStack = createStackNavigator({
   Community: { screen: HomeScreen },
-  
+
 });
 
 const HSStack = createStackNavigator({
@@ -701,8 +715,8 @@ export default createAppContainer(
 
                       },
 
-      Community: { screen: HomeScreen, 
-                     navigationOptions: { tabBarVisible: true, 
+      Community: { screen: HomeScreen,
+                     navigationOptions: { tabBarVisible: true,
 
                                      tabBarIcon: ({ tintColor }) => (
                                      <Icon

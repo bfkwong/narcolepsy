@@ -1,7 +1,7 @@
-export let database;
-export var userEmail;
+ let database;
+ var userEmail;
 
-export let config = {
+ let config = {
     apiKey: "AIzaSyBNPoFd-affJz2oC01SjF_xLoVj_N5LIG8",
     authDomain: "narcolepsy-79d01.firebaseapp.com",
     databaseURL: "https://narcolepsy-79d01.firebaseio.com",
@@ -10,6 +10,7 @@ export let config = {
     messagingSenderId: "914058585382"
 };
 firebase.initializeApp(config);
+
 
 export class Post {
 
@@ -22,6 +23,7 @@ export class Post {
     }
 }
 
+
 export function signUp(email, password, age, height, weight){
 // Sign up user
 // PARAMS:  email (string)
@@ -31,6 +33,7 @@ export function signUp(email, password, age, height, weight){
 //          weight (float)
 // RETURNS: 1 for failure
 //          0 for success
+
     userEmail = email.replace(".","");
     firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
         let errorCode = error.code;
@@ -44,12 +47,14 @@ export function signUp(email, password, age, height, weight){
     return true;
 }
 
+
 export function signIn(email, password) {
 // Sign in user
 // PARAMS:  email (string)
 //          password (string)
 // RETURNS: 1 for failure
 //          0 for success
+
 
     userEmail = email.replace(".","");
     firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
@@ -59,6 +64,7 @@ export function signIn(email, password) {
         return 1;
     });
     database = firebase.database();
+
     initiateTrainingModel();
     return 0;
 }
@@ -68,6 +74,7 @@ export function signOut() {
 // PARAMS:  null
 // RETURNS: 1 for failure
 //          0 for success
+
     firebase.auth().signOut().then(function() {
         console.log("Sign out successful");
         return 0;
@@ -76,6 +83,7 @@ export function signOut() {
         return 1;
     });
 }
+
 
 export function initUserData(age, height, weight) {
 // Add User Data into database
@@ -118,21 +126,24 @@ export function enterSleepyNess(time, awakeness) {
 
 
 export function submitCommunityPost(title, body, score, author) {
+
     let post = new Post(title, body, score, author);
 
 
-    database.ref("posts").push(post);
-    return 0;
+ export function getMinutesSinceMidnight(d) {
+    let n = (d.getHours()*60) + d.getMinutes();
+    return n;
 }
 
-// Listen for changes in firebase database in 'post'
-export let allResponses;
-export let ssRef = firebase.database().ref('post');
+ export let allResponses = []
+ export let ssRef = firebase.database().ref('post');
+
 ssRef.on('value', function(snapshot) {
    // If a change is noticed run the following functions to
    // do whatever change is necessary to accomodate with database change
    allResponses = getAllPosts(snapshot.val());
 });
+
 
 export function getAllPosts(snapshotObj) {
 
@@ -142,6 +153,7 @@ export function getAllPosts(snapshotObj) {
 // RETURNS: Array of Posts Object from Firebase
 
    let allResponses = []
+
    let newObj;
 
    let tempBody, tempScore, tempTitle, tempAuthor;
