@@ -47,9 +47,17 @@ export class HS extends React.Component {
             <ScrollView>
                 <Header
                     style={{position: 'absolute', top: '0'}}
-                    leftComponent={{ icon: 'menu', color: '#fff' }}
+                    /*leftComponent={{
+                        icon: 'menu',
+                        color: '#fff',
+                        onPress: () => {this.props.navigation.navigate('YEETGOD');},
+                    }}*/
                     centerComponent={{ text: 'NUDGE', style: { fontSize: 28, fontWeight: 'bold', color: '#fff' } }}
-                    rightComponent={{ icon: 'home', color: '#fff' }}
+                    rightComponent={{
+                        icon: 'home',
+                        color: '#fff',
+                        onPress: () => {this.props.navigation.navigate('Community');},
+                    }}
                 />
                 <Text style={HSStyles.nextPLapse}>
                     NEXT PREDICTED LAPSE
@@ -205,9 +213,20 @@ class SubmissionScreen extends React.Component {
 
       <View>
         <Header
-          leftComponent={{ icon: 'menu', color: '#fff' }}
-          centerComponent={{ text: 'NUDGE', style: { fontSize: 28, fontWeight: 'bold', color: '#fff' } }}
-          rightComponent={{ icon: 'home', color: '#fff' }}
+            style={{position: 'absolute', top: '0'}}
+            centerComponent={{
+                text: 'NUDGE',
+                style: {
+                    fontSize: 28,
+                    fontWeight: 'bold',
+                    color: '#fff'
+                }
+            }}
+            rightComponent={{
+                icon: 'home',
+                color: '#fff',
+                onPress: () => {this.props.navigation.navigate('Community');},
+            }}
         />
 
         <Text style={{
@@ -360,7 +379,9 @@ const styles = StyleSheet.create({
   msgBox: {
     flexDirection: 'row',
     padding: 20,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    textAlign: 'center',
+    justifyContent: "center",
   },
   filterBox: {
     flexDirection: 'row',
@@ -446,7 +467,24 @@ class HomeScreen extends React.Component {
   render() {
 
     return (
-      <View style={styles.container}>
+      <View>
+
+        <Header
+                    style={{position: 'absolute', top: '0'}}
+                    centerComponent={{
+                        text: 'NUDGE',
+                        style: {
+                            fontSize: 28,
+                            fontWeight: 'bold',
+                            color: '#fff'
+                        }
+                    }}
+                    rightComponent={{
+                        icon: 'home',
+                        color: '#fff',
+                        onPress: () => {this.props.navigation.navigate('Community');},
+                    }}
+        />
 
         <View style={styles.filterBox}>
             <Text style={{color: 'white', fontSize: 25, fontWeight: 'bold', padding: 20}}>
@@ -495,15 +533,18 @@ class HomeScreen extends React.Component {
         />
 
         <View style={styles.msgBox}>
-                  <TextInput placeholder='Enter Idea'
-                    /*value={this.state.message}
+                  <Button
+                color = 'green'
+                title="Create a Nudge"
+                onPress={() => {
+                  /* 1. Navigate to the Details route with params */
+                  this.props.navigation.navigate('SubmissionScreen', {
+                    username: "sdfsdf",
+                    password: "sdfsd",
+                  });
+                }}
+              />
 
-                    Potential here for onPress to switch UIs
-                    or to expand the bar upwards
-
-                    onChangeText={(text) => this.setState({message: text})}*/
-                    style={styles.txtInput}/>
-                  <Button title='Send' /*onPress={this.addItem}*//>
                 </View>
 
       </View>
@@ -574,7 +615,28 @@ class DescriptionScreen extends React.Component {
 
     return (
 
-      <View style = {{ flex: 1, padding: 20, backgroundColor: 'skyblue',  }}>
+      <View style = {{ flex: 1, padding: 20, backgroundColor: '#808080',alignItems:'center' }}>
+
+      <Header
+                  style={{position: 'absolute', top: '0'}}
+                  centerComponent={{
+                      text: 'NUDGE',
+                      style: {
+                          fontSize: 28,
+                          fontWeight: 'bold',
+                          color: '#fff'
+                      }
+                  }}
+                  rightComponent={{
+                      icon: 'home',
+                      color: '#fff',
+                      onPress: () => {this.props.navigation.navigate('Community');},
+                  }}
+      />
+
+      <Text style = {{backgroundColor: 'gold',fontSize: 25, alignSelf: 'flex-end',textAlign: 'right'}}>{JSON.parse(JSON.stringify(rating))}</Text>
+
+<View style = {{ flex: 1, padding: 20, backgroundColor: 'skyblue',  }}>
       <View style = {{flexDirection: 'row', backgroundColor: 'gold',fontSize: 25,textAlign: 'right', alignSelf: 'flex-end'}}>
       <Ionicons name="ios-star" size={25} color="black"/>
       <Text style = {{fontSize:25}}>{JSON.parse(JSON.stringify(rating))}</Text>
@@ -644,6 +706,11 @@ const HomeStack = createStackNavigator({
   DescriptionScreen: { screen: DescriptionScreen },
 });
 
+const HSStack = createStackNavigator({
+  HS: { screen: HS },
+  SubmissionScreen: { screen: SubmissionScreen },
+});
+
 export default createAppContainer(
   createBottomTabNavigator(
     {
@@ -671,8 +738,9 @@ export default createAppContainer(
       )}
 
                        },
-      MyNudge: { screen: HS,
-                     navigationOptions: { tabBarVisible: true,
+
+      MyNudge: { screen: HSStack, 
+                     navigationOptions: { tabBarVisible: true, 
                                      tabBarIcon: ({ tintColor }) => (
                                      <Icon
                                           name="user"
