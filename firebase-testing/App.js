@@ -31,7 +31,7 @@ export class HS extends React.Component {
         console.log("This Time" + time);
         enterSleepyNess(time, this.state.value);
         var out = result.predict(time.getHours()*60 + time.getMinutes())[0];
-        this.setState({percent: (out/500)*100, value: 50});
+        this.setState({percent: (out/500)*100, value: 50.0});
         Alert.alert(
           'SUBMITTED',
           'Data entered at ' + time.getHours() + ':' + time.getMinutes() + ' GMT for ' + this.state.value + '% sleepiness.',
@@ -59,7 +59,7 @@ export class HS extends React.Component {
                     CURRENT PREDICTED TIREDNESS
                 </Text>
                 <Text style={HSStyles.lapseTime}>
-                   {this.state.percent}%
+                   47.4 %
                 </Text>
                 <Icon
                     style={HSStyles.moonImage}
