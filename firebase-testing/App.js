@@ -467,6 +467,18 @@ class HomeScreen extends React.Component {
                 <Text style={styles.listItem}>
                   {item.title}
                 </Text>
+                <Button
+                title="Full Description"
+                onPress={() => {
+                  /* 1. Navigate to the Details route with params */
+                  this.props.navigation.navigate('DescriptionScreen', {
+                    title: item.title,
+                    rating: item.score,
+                    description: item.body,
+                    catagories: [1,0,1],
+                  });
+                }}
+              />
                 <Text style={styles.score}>
                   {item.score}
                 </Text>
@@ -536,6 +548,7 @@ export class LoginScreen extends React.Component {
                   });
                 }}
               />
+
           </View>  
         
       </View>
@@ -546,7 +559,7 @@ export class LoginScreen extends React.Component {
 class DescriptionScreen extends React.Component {
   render() {
     const { navigation } = this.props;
-    const title = navigation.getParam('username', 'NO-ID');
+    const title = navigation.getParam('title', 'NO-ID');
     const rating = navigation.getParam('rating', '99');
     const description = navigation.getParam('description', 'TEST DESCRIPTION');
     const catagories = navigation.getParam('catagories', [1,0,1]);
