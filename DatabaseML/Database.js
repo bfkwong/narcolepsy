@@ -12,10 +12,11 @@ export let config = {
 firebase.initializeApp(config);
 
 export class Post {
-    constructor(title, score, link) {
-        this.title = link;
+    constructor(title, body, score, author) {
+        this.title = title;
+        this.body = body;
         this.score = score;
-        this.link = link;
+        this.author = author;
     }
 }
 
@@ -68,8 +69,8 @@ export function enterSleepyNess(time, awakeness) {
     database.ref("user/" + userEmail + "/sleepyTime").push({time: timeStampMSecs, awake: awakeness});
 }
 
-export function submitCommunityPost(title, score) {
-    let post = new Post(title, score, "");
+export function submitCommunityPost(title, body, score, author) {
+    let post = new Post(title, body, score, author);
     database.ref("posts").push(post);
 }
 
@@ -86,25 +87,16 @@ ssRef.on('value', function(snapshot) {
 
 export function getAllPosts(snapshotObj) {
    let newObj;
-   let tempLink, tempMessage, tempTitle;
-
-   allResponses = [];
+   let tempBody, tempScore, tempTitle, tempAuthor;
    for (val in snapshotObj) {
-      tempLink = snapshotObj[val]["link"];
+      tempBody = snapshotObj[val]["body"];
       tempScore =  snapshotObj[val]["score"];
       tempTitle = snapshotObj[val]["title"];
-      newObj = new Post(tempTitle, tempScore, tempLink);
+      tempAuthor = snapshotObj[val]["author"]
+
+      newObj = new Post(tempTitle, tempScore, tempBody, tempAuthor);
 
       allResponses.push(newObj);
    }
-}
-
-export function getSnapshot() {
-    let allResponses = []
-    let ssRef = firebase.database().ref('post');
-    ssRef.on('value', function(snapshot) {
-       getAllPosts(snapshot.val());
-    });
-    return allResponses;
 }
 
