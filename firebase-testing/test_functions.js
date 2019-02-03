@@ -177,5 +177,4 @@ export function submitCommunityPost(title, body, score, author, filters) {
 
 
     database.ref("posts").push(post);
-    return 0;
 }

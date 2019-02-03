@@ -205,14 +205,7 @@ class SubmissionScreen extends React.Component {
 
       <View>
 
-        <Text style={{
-                             textAlign: 'center',
-                             fontWeight: '500',
-                             fontSize: 20,
-                             marginTop: 20
-                         }}>
-            SUBMIT YOUR COMMUNITY POST
-        </Text>
+
 
         <View style={styles.msgBox}>
           <TextInput placeholder='Enter a Title'
@@ -522,6 +515,7 @@ class HomeScreen extends React.Component {
                 onPress={() => {
                   /* 1. Navigate to the Details route with params */
                   this.props.navigation.navigate('DescriptionScreen', {
+                    author:item.author,
                     title: item.title,
                     rating: item.score,
                     description: item.body,
@@ -604,10 +598,16 @@ class DescriptionScreen extends React.Component {
     this.state = {
       rating: 0,
     }
-
+    this.halfsend = this.halfsend.bind(this);
   }
+  halfsend () {
+      this.setState({rating: this.state.rating+1});
+      console.log(this.state.rating);
+      submitCommunityPost(title, this.state.rating, description, author, catagories);
+    }
   render() {
     const { navigation } = this.props;
+    const author = navigation.getParam('author','billy');
     const title = navigation.getParam('title', 'NO-ID');
     const rating = navigation.getParam('rating', '99');
     const description = navigation.getParam('description', 'TEST DESCRIPTION');
@@ -620,7 +620,7 @@ class DescriptionScreen extends React.Component {
       <View style = {{flexDirection: 'row', backgroundColor: 'gold',fontSize: 25,textAlign: 'right', alignSelf: 'flex-end'}}>
       <Button
       title = <Ionicons name="ios-arrow-up" size={25} color="black"/>
-      onPress = {() => this.setState({rating: this.state.rating+1})  }/>
+      onPress = {this.halfsend}/>
       <Ionicons name="ios-star" size={25} color="black"/>
       <Text style = {{fontSize:25}}>{(JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(rating))+this.state.rating)))}</Text>
       </View>
