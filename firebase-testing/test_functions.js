@@ -174,7 +174,5 @@ export function enterSleepyNess(time, awakeness) {
 
 export function submitCommunityPost(title, body, score, author, filters) {
     let post = new Post(title, body, score, author, filters);
-
-
     database.ref("posts").push(post);
 }
