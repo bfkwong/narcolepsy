@@ -1,21 +1,190 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, Button, FlatList } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TextInput, Button, FlatList, Dimensions } from 'react-native';
 import {Constants} from 'expo';
 import * as firebase from 'firebase';
-import { addone } from './test_functions.js';
+import { addone, getAllPosts, getSnapshot, sortPosts, signIn,allResponses } from './test_functions.js';
+import Slider from "react-native-slider";
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { Divider, Header } from 'react-native-elements';
+import PureChart from 'react-native-pure-chart';
 
 
-const config = {
-    apiKey: "AIzaSyAe7ExQFhUoIzeeWEhpEEMobVLa6WdwUa8",
-    authDomain: "fir-testing-fe210.firebaseapp.com",
-    databaseURL: "https://fir-testing-fe210.firebaseio.com",
-    projectId: "fir-testing-fe210",
-    storageBucket: "",
-    messagingSenderId: "113944131587"
-  };
-  firebase.initializeApp(config);
+console.disableYellowBox = true;
+let database = firebase.database();
+
+export class HS extends React.Component {
+
+      constructor() {
+        super();
+
+        this.state = {
+          data: {
+            datasets: [{
+              yValues: [100, 105, 102, 110],
+              label: 'Data set 1',
+              config: {
+                color: 'teal'
+              }
+            }, {
+              yValues: [110, 100, 105, 108],
+              label: 'Data set 2',
+              config: {
+                color: 'orange'
+              }
+            }],
+            xValues: ['Q1', 'Q2', 'Q3', 'Q4']
+          }
+        };
+      }
+
+    state = {
+        value: 0
+    }
+
+    componentDidMount() {
+
+
+    }
+
+    render() {
+        let sampleData = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+
+        return (
+            <ScrollView>
+                <Header
+                    style={{position: 'absolute', top: '0'}}
+                    leftComponent={{ icon: 'menu', color: '#fff' }}
+                    centerComponent={{ text: 'NUDGE', style: { fontSize: 28, fontWeight: 'bold', color: '#fff' } }}
+                    rightComponent={{ icon: 'home', color: '#fff' }}
+                />
+                <Text style={HSStyles.nextPLapse}>
+                    NEXT PREDICTED LAPSE
+                </Text>
+                <Text style={HSStyles.lapseTime}>
+                   9:45 PM
+                </Text>
+                <Icon
+                    style={HSStyles.moonImage}
+                    name="moon-o"
+                    size={180}
+                    color="#4256c9" />
+                <Text style={HSStyles.tiredText}>
+                    HOW TIRED ARE YOU?
+                </Text>
+                <View style={{marginLeft: 20, marginRight: 20}}>
+                <Slider
+                    value={this.state.value}
+                    onValueChange={value => this.setState({value})}
+                    trackStyle={HSStyles.track}
+                    thumbStyle={HSStyles.thumb}
+                    step={1}
+                    minimumValue={0}
+                    maximumValue={100}
+                />
+                </View>
+                <View style={HSStyles.buttonContainer}>
+                    <Button
+                      title="Submit"
+                      type="Submit"
+                    />
+                </View>
+                <Divider style={HSStyles.divider} />
+                <View style={HSStyles.graphView}>
+                    <Text style={HSStyles.sleepPatternTitle}>
+                        YOUR SLEEP PATTERN
+                    </Text>
+                    <PureChart
+                        data={sampleData}
+                        type='line'
+                        height={200}/>
+                </View>
+
+            </ScrollView>
+        );
+    }
+
+}
+
+const HSStyles = {
+
+    sleepPatternTitle: {
+        fontSize: 17,
+        color:"gray",
+        fontWeight:'600',
+        marginTop:20,
+        marginBottom: 20
+    },
+    graphView: {
+        marginLeft: 20,
+        marginRight: 20
+    },
+    buttonContainer: {
+        marginTop: 10,
+        marginBottom: 10,
+        marginLeft: 80,
+        marginRight: 80
+    },
+    divider: {
+        backgroundColor: 'gray',
+        marginTop: 15
+    },
+    sliderContainer: {
+        flex: 1,
+        alignItems: "stretch",
+        justifyContent: "center",
+        backgroundColor: "#ffffff"
+    },
+    track: {
+        height: 10,
+        borderRadius: 5,
+        backgroundColor: '#d0d0d0',
+    },
+    thumb: {
+        width: 20,
+        height: 30,
+        borderRadius: 5,
+        backgroundColor: '#eb6e1b',
+    },
+    slider: {
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 10
+    },
+    tiredText:  {
+        textAlign: 'center',
+        fontWeight: '500',
+        fontSize: 30,
+        marginTop: 20
+//        color: '#ffffff'
+    },
+    nextPLapse:  {
+        textAlign: 'center',
+        fontWeight: '500',
+        fontSize: 30,
+        marginTop: 20
+//        color: '#ffffff'
+    },
+    moonImage: {
+        textAlign: "center",
+        marginTop: 10,
+        marginBottom: 10
+    },
+    inlineView: {
+        flexDirection: 'row',
+        alignSelf: 'flex-start'
+    },
+    lapseTime: {
+        textAlign: "center",
+        fontWeight: '500',
+        fontSize: 55,
+//        color: '#ffffff'
+    }
+
+}
+
 
 export class App extends React.Component {
+
   constructor(props) {
     super(props)
 
@@ -29,43 +198,14 @@ export class App extends React.Component {
   }
 //
   componentDidMount() {
-    firebase
-      .database()
-      .ref()
-      .child("messages")
-      .once("value", snapshot => {
-        const data = snapshot.val()
-        if (snapshot.val()) {
-          const initMessages = [];
-          Object
-            .keys(data)
-            .forEach(message => initMessages.push(data[message]));
-          this.setState({
-            messages: initMessages
-          })
-        }
-      });
-
-    firebase
-      .database()
-      .ref()
-      .child("messages")
-      .on("child_added", snapshot => {
-        const data = snapshot.val();
-        if (data) {
-          this.setState(prevState => ({
-            messages: [data, ...prevState.messages]
-          }))
-        }
-      })
 
   }
 
   addItem () {
     if (!this.state.message) return;
 
-    const newMessage = firebase.database().ref()
-                          .child("messages")
+    const newMessage = firebase.database().ref("messages")
+                     //     .child("messages")
                           .push();
     newMessage.set(this.state.message, () => this.setState({message: ''}))
   }
@@ -119,6 +259,7 @@ export class App extends React.Component {
 }
 
 const styles = StyleSheet.create({
+
   container: {
     flex: 1,
     backgroundColor: '#eee',
@@ -154,19 +295,9 @@ const styles = StyleSheet.create({
   },
   filterBox: {
     flexDirection: 'row',
-    backgroundColor: 'skyblue',
-    height: 75}
-    ,
-  TitleBox: {
-    backgroundColor: '#808080',},
+    backgroundColor: '#4286f4',
+    height: 75
 
-    Yeet: {
-      backgroundColor: 'gold',},
-
-  descripBox: {
-    flexDirection: 'row',
-    backgroundColor: '#808080',
-    alignItems: 'center',
   },
   txtInput: {
     flex: 1
@@ -200,6 +331,32 @@ import { createBottomTabNavigator, createStackNavigator, createAppContainer } fr
 
 class HomeScreen extends React.Component {
   static navigationOptions = { header: null };
+
+  constructor(props) {
+      super(props)
+
+      this.state = {
+        messages: []
+      }
+      this.obtainMessages = this.obtainMessages.bind(this);
+    }
+  //
+    componentDidMount() {
+        this.obtainMessages();
+    }
+
+    obtainMessages() {
+        signIn("1@g.com", "00000000");
+        if (allResponses.length != 0) {
+            console.log(allResponses);
+            var snap = allResponses.sort(function(a,b) {
+                return a.score - b.score;
+            })
+            this.setState({messages: snap});
+        }
+
+    }
+
   render() {
 
     return (
@@ -223,16 +380,17 @@ class HomeScreen extends React.Component {
             </View>
     </View>
 
-        <FlatList data={["Poop", "Poop the Sequel",
-                            "Poop: Origins", "Poop: Final Frontier"]} //normally data = this.state.messages
+
+
+        <FlatList data={this.state.messages} //normally data = this.state.messages
             renderItem={
               ({item}) =>
               <View style={styles.idea}>
                 <Text style={styles.listItem}>
-                  {item}
+                  {item.title}
                 </Text>
                 <Text style={styles.score}>
-                  23
+                  {item.score}
                 </Text>
               </View>
             }
@@ -345,6 +503,7 @@ export default createAppContainer(
     {
       App: { screen: App },
       Home: { screen: HomeStack },
+      HomeScreen: {screen: HS}
 
     },
     {

@@ -1,0 +1,63 @@
+{
+  "_from": "react-native-game-engine",
+  "_id": "react-native-game-engine@0.10.1",
+  "_inBundle": false,
+  "_integrity": "sha512-Zp8IxcpRrHl4k/BLPe0Gnzw0ESlAOZChYp6jeKjhGxQLYzN2nn4hklEYujlW8Be4/LEnMGXes+8EDoik14H17w==",
+  "_location": "/react-native-game-engine",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "react-native-game-engine",
+    "name": "react-native-game-engine",
+    "escapedName": "react-native-game-engine",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/react-native-game-engine/-/react-native-game-engine-0.10.1.tgz",
+  "_shasum": "3c8592ad6fbf405fdb8716f7212eae5bb457bdd9",
+  "_spec": "react-native-game-engine",
+  "_where": "/Users/williamhickman/AndroidStudioProjects/narcolepsy",
+  "author": {
+    "name": "Boris Berak"
+  },
+  "bugs": {
+    "url": "https://github.com/bberak/react-native-game-engine/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "rxjs": "^6.2.2"
+  },
+  "deprecated": false,
+  "description": "Some React Native components that make it easier to construct interactive scenes using the familiar update + draw lifecycle used in the development of many games ✨",
+  "homepage": "https://github.com/bberak/react-native-game-engine#readme",
+  "keywords": [
+    "React",
+    "React Native",
+    "Game",
+    "Gaming",
+    "Game Dev",
+    "Game Development",
+    "Game Engine"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "react-native-game-engine",
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bberak/react-native-game-engine.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.10.1"
+}

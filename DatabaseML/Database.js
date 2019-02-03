@@ -12,10 +12,12 @@ export let config = {
 firebase.initializeApp(config);
 
 export class Post {
-    constructor(title, score, body, author) {
-        this.title = link;
-        this.score = score;
+
+    constructor(title, body, score, author) {
+        this.title = title;
         this.body = body;
+        this.score = score;
+
         this.author = author;
     }
 }
@@ -114,15 +116,11 @@ export function enterSleepyNess(time, awakeness) {
    return 0;
 }
 
-export function submitCommunityPost(title, score, body) {
-// Send a new community post to the database
-// PARAMS:  Title (String) - The title of the post
-//          Score (int) - The score of the post
-//          Body (String) - The body text of the post
-// RETURNS: 1 for failure
-//          0 for success
 
-    let post = new Post(title, score, "");
+export function submitCommunityPost(title, body, score, author) {
+    let post = new Post(title, body, score, author);
+
+
     database.ref("posts").push(post);
     return 0;
 }
@@ -145,15 +143,18 @@ export function getAllPosts(snapshotObj) {
 
    let allResponses = []
    let newObj;
-   let tempBody, tempMessage, tempTitle, tempAuthor;
 
-   allResponses = [];
+   let tempBody, tempScore, tempTitle, tempAuthor;
+
    for (val in snapshotObj) {
       tempBody = snapshotObj[val]["body"];
       tempScore =  snapshotObj[val]["score"];
       tempTitle = snapshotObj[val]["title"];
       tempAuthor = snapshotObj[val]["author"]
-      newObj = new Post(tempTitle, tempScore, tempBody);
+
+
+      newObj = new Post(tempTitle, tempScore, tempBody, tempAuthor);
+
 
       allResponses.push(newObj);
    }
