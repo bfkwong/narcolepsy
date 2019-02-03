@@ -4,6 +4,7 @@ import {Constants} from 'expo';
 import * as firebase from 'firebase';
 import { addone } from './test_functions.js';
 
+
 const config = {
     apiKey: "AIzaSyAe7ExQFhUoIzeeWEhpEEMobVLa6WdwUa8",
     authDomain: "fir-testing-fe210.firebaseapp.com",
@@ -154,11 +155,18 @@ const styles = StyleSheet.create({
   filterBox: {
     flexDirection: 'row',
     backgroundColor: 'skyblue',
-    height: 75},
+    height: 75}
+    ,
+  TitleBox: {
+    backgroundColor: '#808080',},
 
-    descripBox: {
-      flexDirection: 'row',
-      backgroundColor: '#808080',
+    Yeet: {
+      backgroundColor: 'gold',},
+
+  descripBox: {
+    flexDirection: 'row',
+    backgroundColor: '#808080',
+    alignItems: 'center',
   },
   txtInput: {
     flex: 1
@@ -201,10 +209,18 @@ class HomeScreen extends React.Component {
             <Text style={{color: 'white', fontSize: 25, fontWeight: 'bold', padding: 20}}>
             Filter by:
             </Text>
-            <View style={{ padding: 10, width: 30, height: 30, backgroundColor: 'red',margin:10, marginTop: 25}}/>
-            <View style={{padding:10, width: 30, height: 30, backgroundColor: 'orange',margin: 10, marginTop:25, textAlign: 'center'}}/>
-            <View style={{padding:10, width: 30, height: 30, backgroundColor: 'green',margin: 10, marginTop:25, textAlign: 'center'}}/>
-            <View style={{padding:10, width: 30, height: 30, backgroundColor: 'purple',margin: 10, marginTop:25, textAlign: 'center'}}/>
+            <View style={{  width: 45, height: 38, backgroundColor: 'red', margin:5, marginTop: 20}}>
+            <Button  title="O" color = 'red'/>
+            </View>
+            <View style={{ width: 45, height: 38, backgroundColor: 'orange',margin: 5, marginTop:20, textAlign: 'center'}}>
+            <Button  title="I" color = 'orange'/>
+            </View>
+            <View style={{ width: 45, height: 38, backgroundColor: 'green',margin: 5, marginTop:20, textAlign: 'center'}}>
+            <Button  title="P" color = 'green'/>
+            </View>
+            <View style={{ width: 45, height: 38, backgroundColor: 'purple',margin: 5, marginTop:20, textAlign: 'center'}}>
+            <Button  title="A" color = 'purple'/>
+            </View>
     </View>
 
         <FlatList data={["Poop", "Poop the Sequel",
@@ -250,18 +266,17 @@ class DescriptionScreen extends React.Component {
 
     return (
 
-      <View style = {{ flex: 1, padding: 20, backgroundColor: '#808080', alignItems: 'center' }}>
-      <View style = {{flexDirection: 'row',margin: 20, backgroundColor: 'gold',  textAlign: 'right',  color: 'white', fontSize: 25, fontWeight: 'bold', color: 'yellow' }}>
-      <Text>{JSON.parse(JSON.stringify(rating))}</Text>
-      </View>
+      <View style = {{ flex: 1, padding: 20, backgroundColor: '#808080',alignItems:'center' }}>
+      <Text style = {{backgroundColor: 'gold',fontSize: 25, alignSelf: 'flex-end',textAlign: 'right'}}>{JSON.parse(JSON.stringify(rating))}</Text>
+
       <View style = {styles.descripBox}>
         <Text style={{ backgroundColor: 'skyblue', margin: 10, justifyContent: 'center', color: 'black', fontSize: 35, fontWeight: 'bold' }}>{JSON.parse(JSON.stringify(title))}</Text>
         </View>
         <View style = {styles.descripBox}>
-        <Text style={{  backgroundColor: 'skyblue',margin: 15, justifyContent: 'center', color: 'black',  fontSize: 20 }}>Description: {JSON.parse(JSON.stringify(description))}</Text>
+        <Text style={{  backgroundColor: 'powderblue',margin: 15, justifyContent: 'center', color: 'black',  fontSize: 20 }}>Description: {JSON.parse(JSON.stringify(description))}</Text>
         </View>
         <View style = {styles.descripBox}>
-        <Text style={{ backgroundColor: 'skyblue',margin: 10, justifyContent: 'center', color: 'purple', fontSize: 20 }}>Catagories: {JSON.parse(JSON.stringify(catagories))}</Text>
+        <Text style={{ backgroundColor: 'steelblue',margin: 10, justifyContent: 'center', color: 'purple', fontSize: 25 }}>Catagories: {JSON.parse(JSON.stringify(catagories))}</Text>
         </View>
         </View>
     );
