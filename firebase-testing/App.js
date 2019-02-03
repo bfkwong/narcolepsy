@@ -1,20 +1,255 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, Button, FlatList } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TextInput, Button, FlatList, Dimensions, Alert } from 'react-native';
 import {Constants} from 'expo';
 import * as firebase from 'firebase';
-import { addone } from './test_functions.js';
+import { addone, getAllPosts, getSnapshot, sortPosts, signIn,allResponses, enterSleepyNess } from './test_functions.js';
+import Slider from "react-native-slider";
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { Divider, Header } from 'react-native-elements';
+import PureChart from 'react-native-pure-chart';
 
-const config = {
-    apiKey: "AIzaSyAe7ExQFhUoIzeeWEhpEEMobVLa6WdwUa8",
-    authDomain: "fir-testing-fe210.firebaseapp.com",
-    databaseURL: "https://fir-testing-fe210.firebaseio.com",
-    projectId: "fir-testing-fe210",
-    storageBucket: "",
-    messagingSenderId: "113944131587"
-  };
-  firebase.initializeApp(config);
+
+console.disableYellowBox = true;
+let database = firebase.database();
+
+export class HS extends React.Component {
+
+    constructor() {
+        super();
+        this.submitSleep = this.submitSleep.bind(this);
+        this.state = { value: 50 };
+    }
+
+    submitSleep() {
+        let time = new Date();
+        console.log("This Value" + this.state.value);
+        console.log("This Time" + time);
+        enterSleepyNess(time, this.state.value);
+        Alert.alert(
+          'SUBMITTED',
+          'Data entered at ' + time.getHours() + ':' + time.getMinutes() + ' GMT for ' + this.state.value + '% sleepiness.',
+          [
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ],
+          {cancelable: false},
+        );
+    }
+
+    componentDidMount() {
+
+
+    }
+
+    render() {
+        let sampleData = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+
+        return (
+            <ScrollView>
+                <Header
+                    style={{position: 'absolute', top: '0'}}
+                    leftComponent={{ icon: 'menu', color: '#fff' }}
+                    centerComponent={{ text: 'NUDGE', style: { fontSize: 28, fontWeight: 'bold', color: '#fff' } }}
+                    rightComponent={{ icon: 'home', color: '#fff' }}
+                />
+                <Text style={HSStyles.nextPLapse}>
+                    NEXT PREDICTED LAPSE
+                </Text>
+                <Text style={HSStyles.lapseTime}>
+                   9:45 PM
+                </Text>
+                <Icon
+                    style={HSStyles.moonImage}
+                    name="moon-o"
+                    size={180}
+                    color="#4256c9" />
+                <Text style={HSStyles.tiredText}>
+                    HOW TIRED ARE YOU?
+                </Text>
+                <View style={{marginLeft: 20, marginRight: 20}}>
+                <Slider
+                    value={this.state.value}
+                    onValueChange={value => this.setState({value})}
+                    trackStyle={HSStyles.track}
+                    thumbStyle={HSStyles.thumb}
+                    step={1}
+                    minimumValue={0}
+                    maximumValue={100}
+                />
+                </View>
+                <View style={HSStyles.buttonContainer}>
+                    <Button
+                      title="Submit"
+                      type="Submit"
+                      onPress={this.submitSleep}
+                    />
+                    <Text>Value: {this.state.value}</Text>
+                </View>
+                <Divider style={HSStyles.divider} />
+                <View style={HSStyles.graphView}>
+                    <Text style={HSStyles.sleepPatternTitle}>
+                        YOUR SLEEP PATTERN
+                    </Text>
+                    <PureChart
+                        data={sampleData}
+                        type='line'
+                        height={200}/>
+                </View>
+
+            </ScrollView>
+        );
+    }
+
+}
+
+const HSStyles = {
+
+    sleepPatternTitle: {
+        fontSize: 17,
+        color:"gray",
+        fontWeight:'600',
+        marginTop:20,
+        marginBottom: 20
+    },
+    graphView: {
+        marginLeft: 20,
+        marginRight: 20
+    },
+    buttonContainer: {
+        marginTop: 10,
+        marginBottom: 10,
+        marginLeft: 80,
+        marginRight: 80
+    },
+    divider: {
+        backgroundColor: 'gray',
+        marginTop: 15
+    },
+    sliderContainer: {
+        flex: 1,
+        alignItems: "stretch",
+        justifyContent: "center",
+        backgroundColor: "#ffffff"
+    },
+    track: {
+        height: 10,
+        borderRadius: 5,
+        backgroundColor: '#d0d0d0',
+    },
+    thumb: {
+        width: 20,
+        height: 30,
+        borderRadius: 5,
+        backgroundColor: '#eb6e1b',
+    },
+    slider: {
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 10
+    },
+    tiredText:  {
+        textAlign: 'center',
+        fontWeight: '500',
+        fontSize: 30,
+        marginTop: 20
+//        color: '#ffffff'
+    },
+    nextPLapse:  {
+        textAlign: 'center',
+        fontWeight: '500',
+        fontSize: 30,
+        marginTop: 20
+//        color: '#ffffff'
+    },
+    moonImage: {
+        textAlign: "center",
+        marginTop: 10,
+        marginBottom: 10
+    },
+    inlineView: {
+        flexDirection: 'row',
+        alignSelf: 'flex-start'
+    },
+    lapseTime: {
+        textAlign: "center",
+        fontWeight: '500',
+        fontSize: 55,
+//        color: '#ffffff'
+    }
+
+}
+
+class SubmissionScreen extends React.Component {
+
+  constructor(props) {
+      super(props)
+
+      this.state = {
+        title: '',
+        text: '',
+        height: 0
+      }
+    }
+
+  render() {
+    const { navigation } = this.props;
+    const title = navigation.getParam('title', 'NO-ID');
+    const rating = navigation.getParam('rating', '99');
+    const description = navigation.getParam('description', 'TEST DESCRIPTION');
+    const catagories = navigation.getParam('catagories', [1,0,1]);
+
+    return (
+
+      <View>
+        <Header
+          leftComponent={{ icon: 'menu', color: '#fff' }}
+          centerComponent={{ text: 'NUDGE', style: { fontSize: 28, fontWeight: 'bold', color: '#fff' } }}
+          rightComponent={{ icon: 'home', color: '#fff' }}
+        />
+
+        <Text style={{
+                             textAlign: 'center',
+                             fontWeight: '500',
+                             fontSize: 20,
+                             marginTop: 20
+                         }}>
+            SUBMIT YOUR COMMUNITY POST
+        </Text>
+        <View style={styles.msgBox}>
+          <TextInput style={{}} placeholder='Enter a Title'
+            value={this.state.title}
+            onChangeText={(message) => this.setState({title: message})}
+            style={styles.txtInput}/>
+        </View>
+        <Divider style={{ backgroundColor: 'gray' }}/>
+        <Divider style={{ backgroundColor: 'gray' }}/>
+
+        <View style={{padding: 40, flexDirection: 'row', justifyContent: 'space-between'}}>
+
+        </View>
+
+        <Divider style={{ backgroundColor: 'gray' }}/>
+        <Divider style={{ backgroundColor: 'gray' }}/>
+        <View style={styles.msgBox}>
+          <TextInput
+            placeholder='Enter your message'
+            multiline={true}
+            value={this.state.text}
+            onChangeText={(message) => this.setState({text: message})}
+            style={styles.txtInput}/>
+        </View>
+        <Button
+            title='SUBMIT'
+            onPress={this.addItem}/>
+      </View>
+
+    );
+  }
+}
+
+
 
 export class App extends React.Component {
+
   constructor(props) {
     super(props)
 
@@ -28,43 +263,14 @@ export class App extends React.Component {
   }
 //
   componentDidMount() {
-    firebase
-      .database()
-      .ref()
-      .child("messages")
-      .once("value", snapshot => {
-        const data = snapshot.val()
-        if (snapshot.val()) {
-          const initMessages = [];
-          Object
-            .keys(data)
-            .forEach(message => initMessages.push(data[message]));
-          this.setState({
-            messages: initMessages
-          })
-        }
-      });
-
-    firebase
-      .database()
-      .ref()
-      .child("messages")
-      .on("child_added", snapshot => {
-        const data = snapshot.val();
-        if (data) {
-          this.setState(prevState => ({
-            messages: [data, ...prevState.messages]
-          }))
-        }
-      })
 
   }
 
   addItem () {
     if (!this.state.message) return;
 
-    const newMessage = firebase.database().ref()
-                          .child("messages")
+    const newMessage = firebase.database().ref("messages")
+                     //     .child("messages")
                           .push();
     newMessage.set(this.state.message, () => this.setState({message: ''}))
   }
@@ -118,6 +324,7 @@ export class App extends React.Component {
 }
 
 const styles = StyleSheet.create({
+
   container: {
     flex: 1,
     backgroundColor: '#eee',
@@ -153,12 +360,9 @@ const styles = StyleSheet.create({
   },
   filterBox: {
     flexDirection: 'row',
-    backgroundColor: 'skyblue',
-    height: 75},
+    backgroundColor: '#4286f4',
+    height: 75
 
-    descripBox: {
-      flexDirection: 'row',
-      backgroundColor: '#808080',
   },
   txtInput: {
     flex: 1
@@ -205,6 +409,32 @@ import { createBottomTabNavigator, createStackNavigator, createAppContainer } fr
 
 class HomeScreen extends React.Component {
   static navigationOptions = { header: null };
+
+  constructor(props) {
+      super(props)
+
+      this.state = {
+        messages: []
+      }
+      this.obtainMessages = this.obtainMessages.bind(this);
+    }
+  //
+    componentDidMount() {
+        this.obtainMessages();
+    }
+
+    obtainMessages() {
+        signIn("1@g.com", "00000000");
+        if (allResponses.length != 0) {
+            console.log(allResponses);
+            var snap = allResponses.sort(function(a,b) {
+                return a.score - b.score;
+            })
+            this.setState({messages: snap});
+        }
+
+    }
+
   render() {
 
     return (
@@ -214,22 +444,31 @@ class HomeScreen extends React.Component {
             <Text style={{color: 'white', fontSize: 25, fontWeight: 'bold', padding: 20}}>
             Filter by:
             </Text>
-            <View style={{ padding: 10, width: 30, height: 30, backgroundColor: 'red',margin:10, marginTop: 25}}/>
-            <View style={{padding:10, width: 30, height: 30, backgroundColor: 'orange',margin: 10, marginTop:25, textAlign: 'center'}}/>
-            <View style={{padding:10, width: 30, height: 30, backgroundColor: 'green',margin: 10, marginTop:25, textAlign: 'center'}}/>
-            <View style={{padding:10, width: 30, height: 30, backgroundColor: 'purple',margin: 10, marginTop:25, textAlign: 'center'}}/>
+            <View style={{  width: 45, height: 38, backgroundColor: 'red', margin:5, marginTop: 20}}>
+            <Button  title="O" color = 'red'/>
+            </View>
+            <View style={{ width: 45, height: 38, backgroundColor: 'orange',margin: 5, marginTop:20, textAlign: 'center'}}>
+            <Button  title="I" color = 'orange'/>
+            </View>
+            <View style={{ width: 45, height: 38, backgroundColor: 'green',margin: 5, marginTop:20, textAlign: 'center'}}>
+            <Button  title="P" color = 'green'/>
+            </View>
+            <View style={{ width: 45, height: 38, backgroundColor: 'purple',margin: 5, marginTop:20, textAlign: 'center'}}>
+            <Button  title="A" color = 'purple'/>
+            </View>
     </View>
 
-        <FlatList data={["Poop", "Poop the Sequel",
-                            "Poop: Origins", "Poop: Final Frontier"]} //normally data = this.state.messages
+
+
+        <FlatList data={this.state.messages} //normally data = this.state.messages
             renderItem={
               ({item}) =>
               <View style={styles.idea}>
                 <Text style={styles.listItem}>
-                  {item}
+                  {item.title}
                 </Text>
                 <Text style={styles.score}>
-                  23
+                  {item.score}
                 </Text>
               </View>
             }
@@ -314,18 +553,17 @@ class DescriptionScreen extends React.Component {
 
     return (
 
-      <View style = {{ flex: 1, padding: 20, backgroundColor: '#808080', alignItems: 'center' }}>
-      <View style = {{flexDirection: 'row',margin: 20, backgroundColor: 'gold',  textAlign: 'right',  color: 'white', fontSize: 25, fontWeight: 'bold', color: 'yellow' }}>
-      <Text>{JSON.parse(JSON.stringify(rating))}</Text>
-      </View>
+      <View style = {{ flex: 1, padding: 20, backgroundColor: '#808080',alignItems:'center' }}>
+      <Text style = {{backgroundColor: 'gold',fontSize: 25, alignSelf: 'flex-end',textAlign: 'right'}}>{JSON.parse(JSON.stringify(rating))}</Text>
+
       <View style = {styles.descripBox}>
         <Text style={{ backgroundColor: 'skyblue', margin: 10, justifyContent: 'center', color: 'black', fontSize: 35, fontWeight: 'bold' }}>{JSON.parse(JSON.stringify(title))}</Text>
         </View>
         <View style = {styles.descripBox}>
-        <Text style={{  backgroundColor: 'skyblue',margin: 15, justifyContent: 'center', color: 'black',  fontSize: 20 }}>Description: {JSON.parse(JSON.stringify(description))}</Text>
+        <Text style={{  backgroundColor: 'powderblue',margin: 15, justifyContent: 'center', color: 'black',  fontSize: 20 }}>Description: {JSON.parse(JSON.stringify(description))}</Text>
         </View>
         <View style = {styles.descripBox}>
-        <Text style={{ backgroundColor: 'skyblue',margin: 10, justifyContent: 'center', color: 'purple', fontSize: 20 }}>Catagories: {JSON.parse(JSON.stringify(catagories))}</Text>
+        <Text style={{ backgroundColor: 'steelblue',margin: 10, justifyContent: 'center', color: 'purple', fontSize: 25 }}>Catagories: {JSON.parse(JSON.stringify(catagories))}</Text>
         </View>
         </View>
     );
@@ -387,6 +625,7 @@ const HomeStack = createStackNavigator({
 export default createAppContainer(
   createBottomTabNavigator(
     {
+
       SwitchAccount: { screen: LoginScreen, 
                      navigationOptions: { tabBarVisible: false, 
                                      tabBarIcon: ({ tintColor }) => (
@@ -412,6 +651,7 @@ export default createAppContainer(
                        },
       
 //
+
     },
     {
       defaultNavigationOptions: ({ navigation }) => ({
