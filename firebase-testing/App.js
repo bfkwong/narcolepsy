@@ -466,17 +466,21 @@ class HomeScreen extends React.Component {
     }
 
   render() {
-
     return (
       <View>
         <Header
           style={{position: 'absolute', top: '0'}}
+          leftComponent={{
+            icon: 'refresh',
+            color: '#fff',
+            onPress: () => {this.obtainMessages},
+          }}
           centerComponent={{
             text: 'NUDGE',
             style: {
-              fontSize: 28,
-              fontWeight: 'bold',
-              color: '#fff'
+            fontSize: 28,
+            fontWeight: 'bold',
+            color: '#fff'
             }
           }}
           rightComponent={{
