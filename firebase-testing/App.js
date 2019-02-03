@@ -1,11 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, TextInput, Button, FlatList, Dimensions, Alert } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TextInput, FlatList, Dimensions, Alert } from 'react-native';
 import {Constants} from 'expo';
 import * as firebase from 'firebase';
 import { addone, getAllPosts, getSnapshot, sortPosts, signIn,allResponses, enterSleepyNess } from './test_functions.js';
 import Slider from "react-native-slider";
 import Icon from '@expo/vector-icons/FontAwesome';
-import { Divider, Header } from 'react-native-elements';
+import { Divider, Header, Button, CheckBox } from 'react-native-elements';
 import PureChart from 'react-native-pure-chart';
 
 
@@ -156,6 +156,10 @@ const HSStyles = {
         marginTop: 20
 //        color: '#ffffff'
     },
+    starImage: {
+        marginTop: 10,
+        marginBottom: 10},
+
     moonImage: {
         textAlign: "center",
         marginTop: 10,
@@ -182,14 +186,19 @@ class SubmissionScreen extends React.Component {
       this.state = {
         title: '',
         text: '',
-        height: 0
+        height: 0,
+        outdoors: false,
+        creative: false,
+        shock: false,
       }
+
       this.highlight = this.highlight.bind(this);
   }
 
   highlight () {
 
   }
+
 
   render() {
     const { navigation } = this.props;
@@ -218,17 +227,25 @@ class SubmissionScreen extends React.Component {
         <Divider style={{ backgroundColor: 'gray' }}/>
         <Divider style={{ backgroundColor: 'gray' }}/>
 
-        <View style={{padding: 35, flexDirection: 'row', justifyContent: 'space-between'}}>
-
-            <View style={{  width: 45, height: 38, backgroundColor: 'red', margin:5, marginTop: 20, marginLeft: 20}}>
-                <Button  title="O" color = 'red'/>
-            </View>
-            <View style={{ width: 45, height: 38, backgroundColor: 'orange',margin: 5, marginTop:20, textAlign: 'center'}}>
-                <Button  title="I" color = 'orange'/>
-            </View>
-            <View style={{ width: 45, height: 38, backgroundColor: 'green',margin: 5, marginTop:20, marginRight: 20}}>
-                <Button  title="P" color = 'green'/>
-            </View>
+        <View style={{flex: 1, flexDirection: 'row'}}>
+          
+          <CheckBox
+            title='Outdoors'
+            checked={this.state.outdoors}
+            onPress={() => this.setState({outdoors: !this.state.outdoors})}
+          />
+          <CheckBox
+            title='Creative'
+            checked={this.state.creative}
+            onPress={() => this.setState({creative: !this.state.creative})}
+          />
+          <CheckBox
+            title='Shock'
+            checked={this.state.shock}
+            onPress={() => this.setState({shock: !this.state.shock})}
+          />
+        </View>
+        <View style={{padding: 40, flexDirection: 'row', justifyContent: 'space-between'}}>
 
         </View>
 
@@ -304,7 +321,7 @@ export class App extends React.Component {
                 {item}
               </Text>
               <Button
-                title="Full description"
+                title=<Ionicons name="ios-list" size={25} color="black"/>
                 onPress={() => {
                   /* 1. Navigate to the Details route with params */
                   this.props.navigation.navigate('DescriptionScreen', {
@@ -369,6 +386,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#4286f4',
     height: 75
+
+  },
+  descripBox: {
+    backgroundColor: 'skyblue',
 
   },
   txtInput: {
@@ -468,16 +489,13 @@ class HomeScreen extends React.Component {
             Filter by:
             </Text>
             <View style={{  width: 45, height: 38, backgroundColor: 'red', margin:5, marginTop: 20}}>
-            <Button  title="O" color = 'red'/>
+            <Button  title=<Ionicons name="ios-baseball" size={25} color="red"/> backgroundColor = 'red'/>
             </View>
-            <View style={{ width: 45, height: 38, backgroundColor: 'orange',margin: 5, marginTop:20, textAlign: 'center'}}>
-            <Button  title="I" color = 'orange'/>
+            <View style={{ width: 40, height: 35, backgroundColor: 'orange',margin: 5, marginTop:20, textAlign: 'center'}}>
+            <Button  title=<Ionicons name="ios-flash" size={25} color="orange"/>  color = 'orange'/>
             </View>
             <View style={{ width: 45, height: 38, backgroundColor: 'green',margin: 5, marginTop:20, textAlign: 'center'}}>
-            <Button  title="P" color = 'green'/>
-            </View>
-            <View style={{ width: 45, height: 38, backgroundColor: 'purple',margin: 5, marginTop:20, textAlign: 'center'}}>
-            <Button  title="A" color = 'purple'/>
+            <Button title=<Ionicons name="ios-bulb" size={25} color="gold"/>  color = 'green'/>
             </View>
     </View>
 
@@ -487,11 +505,9 @@ class HomeScreen extends React.Component {
             renderItem={
               ({item}) =>
               <View style={styles.idea}>
-                <Text style={styles.listItem}>
-                  {item.title}
-                </Text>
+                
                 <Button
-                title="Full Description"
+                title={item.title}
                 onPress={() => {
                   /* 1. Navigate to the Details route with params */
                   this.props.navigation.navigate('DescriptionScreen', {
@@ -503,6 +519,7 @@ class HomeScreen extends React.Component {
                 }}
               />
                 <Text style={styles.score}>
+                <Ionicons name="ios-star" size={25} color="white"/>
                   {item.score}
                 </Text>
               </View>
@@ -542,7 +559,7 @@ export class LoginScreen extends React.Component {
 
   }
 
-  
+
 
   render() {
     return (
@@ -562,8 +579,8 @@ export class LoginScreen extends React.Component {
                   secureTextEntry={true}
                   style={styles.input}
                 />
-                
-                
+
+
               <Button
                 title="Log In"
                 onPress={() => {
@@ -575,8 +592,8 @@ export class LoginScreen extends React.Component {
                 }}
               />
 
-          </View>  
-        
+          </View>
+
       </View>
     );
   }
@@ -592,18 +609,20 @@ class DescriptionScreen extends React.Component {
 
     return (
 
-      <View style = {{ flex: 1, padding: 20, backgroundColor: '#808080',alignItems:'center' }}>
 
-      <Text style = {{backgroundColor: 'gold',fontSize: 25, alignSelf: 'flex-end',textAlign: 'right'}}>{JSON.parse(JSON.stringify(rating))}</Text>
-
+      <View style = {{ flex: 1, padding: 20, backgroundColor: 'skyblue',  }}>
+      <View style = {{flexDirection: 'row', backgroundColor: 'gold',fontSize: 25,textAlign: 'right', alignSelf: 'flex-end'}}>
+      <Ionicons name="ios-star" size={25} color="black"/>
+      <Text style = {{fontSize:25}}>{JSON.parse(JSON.stringify(rating))}</Text>
+      </View>
       <View style = {styles.descripBox}>
-        <Text style={{ backgroundColor: 'skyblue', margin: 10, justifyContent: 'center', color: 'black', fontSize: 35, fontWeight: 'bold' }}>{JSON.parse(JSON.stringify(title))}</Text>
+        <Text style={{ backgroundColor: 'skyblue', margin: 10,  color: 'black', fontSize: 35, fontWeight: 'bold' }}>{JSON.parse(JSON.stringify(title))}</Text>
         </View>
         <View style = {styles.descripBox}>
-        <Text style={{  backgroundColor: 'powderblue',margin: 15, justifyContent: 'center', color: 'black',  fontSize: 20 }}>Description: {JSON.parse(JSON.stringify(description))}</Text>
+        <Text style={{  backgroundColor: 'skyblue',margin: 15, color: 'black',  fontSize: 25 }}>Description: {JSON.parse(JSON.stringify(description))}</Text>
         </View>
         <View style = {styles.descripBox}>
-        <Text style={{ backgroundColor: 'steelblue',margin: 10, justifyContent: 'center', color: 'purple', fontSize: 25 }}>Catagories: {JSON.parse(JSON.stringify(catagories))}</Text>
+        <Text style={{ backgroundColor: 'skyblue', margin: 10, color: 'purple', fontSize: 20 }}>Catagories: {JSON.parse(JSON.stringify(catagories))}</Text>
         </View>
         </View>
     );
@@ -641,6 +660,8 @@ class IconWithBadge extends React.Component {
   }
 }
 
+
+
 const getTabBarIcon = (navigation, focused, tintColor) => {
   const { routeName } = navigation.state;
   let IconComponent = Ionicons;
@@ -658,20 +679,21 @@ const getTabBarIcon = (navigation, focused, tintColor) => {
 
 const HomeStack = createStackNavigator({
   Community: { screen: HomeScreen },
-  DescriptionScreen: { screen: DescriptionScreen },
+  
 });
 
 const HSStack = createStackNavigator({
   HS: { screen: HS },
   SubmissionScreen: { screen: SubmissionScreen },
+  DescriptionScreen: { screen: DescriptionScreen },
 });
 
 export default createAppContainer(
   createBottomTabNavigator(
     {
 
-      SwitchAccount: { screen: LoginScreen, 
-                     navigationOptions: { tabBarVisible: false, 
+      SwitchAccount: { screen: LoginScreen,
+                     navigationOptions: { tabBarVisible: false,
                                      tabBarIcon: ({ tintColor }) => (
                                      <Icon
                                           name="refresh"
@@ -682,8 +704,9 @@ export default createAppContainer(
 
                       },
 
-      Community: { screen: HomeStack, 
+      Community: { screen: HomeScreen, 
                      navigationOptions: { tabBarVisible: true, 
+
                                      tabBarIcon: ({ tintColor }) => (
                                      <Icon
                                           name="home"
@@ -693,8 +716,9 @@ export default createAppContainer(
       )}
 
                        },
-      MyNudge: { screen: HSStack, 
-                     navigationOptions: { tabBarVisible: true, 
+
+      MyNudge: { screen: HSStack,
+                     navigationOptions: { tabBarVisible: true,
                                      tabBarIcon: ({ tintColor }) => (
                                      <Icon
                                           name="user"
