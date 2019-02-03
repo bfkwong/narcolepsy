@@ -210,15 +210,6 @@ class SubmissionScreen extends React.Component {
 
       <View>
 
-        <Text style={{
-                             textAlign: 'center',
-                             fontWeight: '500',
-                             fontSize: 20,
-                             marginTop: 20
-                         }}>
-            SUBMIT YOUR COMMUNITY POST
-        </Text>
-
         <View style={styles.msgBox}>
           <TextInput placeholder='Enter a Title'
             onChangeText={(title) => this.setState({title})}
@@ -492,7 +483,7 @@ class HomeScreen extends React.Component {
         <View style={styles.yeet}>
                   <Button
                 color = 'green'
-                title="Create a Nudge"
+                title="Create a Suggestion"
                 onPress={() => {
                   /* 1. Navigate to the Details route with params */
                   this.props.navigation.navigate('SubmissionScreen', {
