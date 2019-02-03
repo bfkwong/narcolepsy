@@ -4,7 +4,7 @@ import {Constants} from 'expo';
 import * as firebase from 'firebase';
 import { addone, getAllPosts, getSnapshot, sortPosts, signIn,allResponses, enterSleepyNess } from './test_functions.js';
 import Slider from "react-native-slider";
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from '@expo/vector-icons/FontAwesome';
 import { Divider, Header } from 'react-native-elements';
 import PureChart from 'react-native-pure-chart';
 
@@ -530,7 +530,7 @@ export class LoginScreen extends React.Component {
                 title="Log In"
                 onPress={() => {
                   /* 1. Navigate to the Details route with params */
-                  this.props.navigation.navigate('Home', {
+                  this.props.navigation.navigate('MyNudge', {
                     username: this.state.username,
                     password: this.state.password,
                   });
@@ -601,12 +601,11 @@ class IconWithBadge extends React.Component {
   }
 }
 
-import Icon from '@expo/vector-icons/FontAwesome';
 const getTabBarIcon = (navigation, focused, tintColor) => {
   const { routeName } = navigation.state;
   let IconComponent = Ionicons;
   let iconName;
-  if (routeName === 'Home') {
+  if (routeName === 'Community') {
     iconName = `ios-home${focused ? '' : '-outline'}`;
 
   } else if (routeName === 'SwitchAccount') {
@@ -618,7 +617,7 @@ const getTabBarIcon = (navigation, focused, tintColor) => {
 };
 
 const HomeStack = createStackNavigator({
-  Home: { screen: HomeScreen },
+  Community: { screen: HomeScreen },
   DescriptionScreen: { screen: DescriptionScreen },
 });
 
@@ -638,7 +637,7 @@ export default createAppContainer(
 
                       },
 
-      Home: { screen: HomeStack, 
+      Community: { screen: HomeStack, 
                      navigationOptions: { tabBarVisible: true, 
                                      tabBarIcon: ({ tintColor }) => (
                                      <Icon
@@ -649,10 +648,21 @@ export default createAppContainer(
       )}
 
                        },
-      
+      MyNudge: { screen: HS, 
+                     navigationOptions: { tabBarVisible: true, 
+                                     tabBarIcon: ({ tintColor }) => (
+                                     <Icon
+                                          name="user"
+                                          color={tintColor}
+                                          size={24}
+                                      />
+      )}
+
+                       },
 //
 
     },
+
     {
       defaultNavigationOptions: ({ navigation }) => ({
         tabBarIcon: ({ focused, tintColor }) =>
