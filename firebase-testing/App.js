@@ -154,7 +154,11 @@ const styles = StyleSheet.create({
   filterBox: {
     flexDirection: 'row',
     backgroundColor: 'skyblue',
-    height: 75
+    height: 75},
+
+    descripBox: {
+      flexDirection: 'row',
+      backgroundColor: '#808080',
   },
   txtInput: {
     flex: 1
@@ -243,15 +247,20 @@ class DescriptionScreen extends React.Component {
 
     return (
 
-      <View style = {{ flex: 2,padding: 20, backgroundColor: '#808080', alignItems: 'center' }}>
-      <View style = {{flexDirection: 'row',marigin: 'right', backgroundColor: 'gold',  textAlign: 'right',  color: 'white', fontSize: 20, fontWeight: 'bold', color: 'yellow' }}>
+      <View style = {{ flex: 1,padding: 20, backgroundColor: '#808080', alignItems: 'center' }}>
+      <View style = {{flexDirection: 'row',margin: 20, backgroundColor: 'gold',  textAlign: 'right',  color: 'white', fontSize: 25, fontWeight: 'bold', color: 'yellow' }}>
       <Text>{JSON.parse(JSON.stringify(rating))}</Text>
       </View>
-        <Text style={{ justifyContent: 'center', color: 'blue', fontSize: 35, fontWeight: 'bold' }}>{JSON.parse(JSON.stringify(title))}</Text>
-        <Text style={{ justifyContent: 'center', color: 'black', fontSize: 15 }}>Description: {JSON.parse(JSON.stringify(description))}</Text>
-        <Text style={{ justifyContent: 'center', padding: 30,color: 'purple', fontSize: 12 }}>Catagories: {JSON.parse(JSON.stringify(catagories))}</Text>
+      <View style = {styles.descripBox}>
+        <Text style={{ backgroundColor: 'skyblue', margin: 10, justifyContent: 'center', color: 'black', fontSize: 35, fontWeight: 'bold' }}>{JSON.parse(JSON.stringify(title))}</Text>
         </View>
-
+        <View style = {styles.descripBox}>
+        <Text style={{  backgroundColor: 'skyblue',margin: 15, justifyContent: 'center', color: 'black',  fontSize: 20 }}>Description: {JSON.parse(JSON.stringify(description))}</Text>
+        </View>
+        <View style = {styles.descripBox}>
+        <Text style={{ backgroundColor: 'skyblue',margin: 10, justifyContent: 'center', color: 'purple', fontSize: 20 }}>Catagories: {JSON.parse(JSON.stringify(catagories))}</Text>
+        </View>
+        </View>
     );
   }
 }
