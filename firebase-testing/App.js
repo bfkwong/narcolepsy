@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, ScrollView, TextInput, FlatList, Dimensions, Alert } from 'react-native';
 import {Constants} from 'expo';
 import * as firebase from 'firebase';
-import { addone, getAllPosts, getSnapshot, sortPosts, signIn,allResponses, enterSleepyNess } from './test_functions.js';
+import { userEmail, submitCommunityPost, addone, getAllPosts, getSnapshot, sortPosts, signIn,allResponses, enterSleepyNess } from './test_functions.js';
 import Slider from "react-native-slider";
 import Icon from '@expo/vector-icons/FontAwesome';
 import { Divider, Header, Button, CheckBox } from 'react-native-elements';
@@ -191,14 +191,14 @@ class SubmissionScreen extends React.Component {
         creative: false,
         shock: false,
       }
-
-      this.highlight = this.highlight.bind(this);
+      this.fullsend = this.fullsend.bind(this);
   }
 
-  highlight () {
-
+  fullsend () {
+      console.log(this.state.title);
+      console.log(this.state.text);
+      submitCommunityPost(this.state.title, 0, this.state.text, userEmail, [this.state.outdoors, this.state.creative, this.state.shock]);
   }
-
 
   render() {
     const { navigation } = this.props;
@@ -210,11 +210,19 @@ class SubmissionScreen extends React.Component {
 
       <View>
 
- 
+        <Text style={{
+                             textAlign: 'center',
+                             fontWeight: '500',
+                             fontSize: 20,
+                             marginTop: 20
+                         }}>
+            SUBMIT YOUR COMMUNITY POST
+        </Text>
+
         <View style={styles.msgBox}>
-          <TextInput style={{}} placeholder='Enter a Title'
+          <TextInput placeholder='Enter a Title'
+            onChangeText={(title) => this.setState({title})}
             value={this.state.title}
-            onChangeText={(message) => this.setState({title: message})}
             style={styles.txtInput}/>
         </View>
         <Divider style={{ backgroundColor: 'gray' }}/>
@@ -248,13 +256,13 @@ class SubmissionScreen extends React.Component {
           <TextInput
             placeholder='Enter your message'
             multiline={true}
+            onChangeText={(text) => this.setState({text})}
             value={this.state.text}
-            onChangeText={(message) => this.setState({text: message})}
             style={styles.txtInput}/>
         </View>
         <Button
             title='SUBMIT'
-            onPress={this.addItem}/>
+            onPress={this.fullsend}/>
       </View>
 
     );
