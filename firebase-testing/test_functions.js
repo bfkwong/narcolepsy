@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TextInput, Button, FlatList } from 'react-nativ
 import {Constants} from 'expo';
 import * as firebase from 'firebase';
 
+export let userEmail = "";
 export let allResponses = [];
 export let config = {
     apiKey: "AIzaSyBNPoFd-affJz2oC01SjF_xLoVj_N5LIG8",
@@ -13,6 +14,9 @@ export let config = {
     messagingSenderId: "914058585382"
 };
 firebase.initializeApp(config);
+export let database = firebase.database();
+export let sleepiness = [];
+export let time = [];
 
 export function addone(x) {
   return x + 1;
@@ -84,18 +88,17 @@ export function getAllPosts(snapshotObj) {
    }
 }
 
-//export function getSnapshot() {
-//    allResponses = []
-//    let ssRef = firebase.database().ref('posts');
-//    ssRef.on('value', function(snapshot) {
-//       var temp = getAllPosts(snapshot.val());
-//    });
-//}
-
-let ssRef = firebase.database().ref('posts');
-ssRef.on('value', function(snapshot) {
+let postRefernce = firebase.database().ref('posts');
+postRefernce.on('value', function(snapshot) {
     getAllPosts(snapshot.val());
 });
+
+let userReference = firebase.database().ref('user/' + userEmail + '/sleepyTime');
+userReference.on('value', function(snapshot) {
+    retrainModel(snapshot.val());
+    console.log("graph Network");
+});
+
 
 export function signIn(email, password) {
     userEmail = email.replace(".","");
@@ -122,5 +125,23 @@ export function getGraphOutput() {
     for (var i = 0; i < 1440; i+=1) {
         range.push(i/1440);
         output.push(newModel.predict(i));
+    }
+}
 
+export function retrainModel(obj) {
+    for (var key in obj) {
+        sleepiness[obj[key]["time"]] = obj[key]["awake"];
+        time[obj[key]["time"]] = obj[key]["time"];
+        for (x = obj[key]["time"]-0; x < obj[key]["time"]+0; x++) {
+            if (x >= 0 && x <1440){
+                sleepiness[x] += obj[key]["awake"];
+            }
+        }
+    }
+}
+
+export function enterSleepyNess(time, awakeness) {
+    var timeStampMSecs = (time.getHours()*60) + time.getMinutes();
+    console.log("Time: " + timeStampMSecs);
+    database.ref("user/" + userEmail + "/sleepyTime").push({time: timeStampMSecs, awake: awakeness});
 }
