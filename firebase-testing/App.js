@@ -247,6 +247,7 @@ class SubmissionScreen extends React.Component {
 }
 
 
+
 export class App extends React.Component {
 
   constructor(props) {
@@ -298,7 +299,7 @@ export class App extends React.Component {
                 {item}
               </Text>
               <Button
-                title="Go to DescriptionScreen"
+                title="Full description"
                 onPress={() => {
                   /* 1. Navigate to the Details route with params */
                   this.props.navigation.navigate('DescriptionScreen', {
@@ -361,6 +362,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#4286f4',
     height: 75
+
   },
   txtInput: {
     flex: 1
@@ -429,8 +431,19 @@ class HomeScreen extends React.Component {
             <Text style={{color: 'white', fontSize: 25, fontWeight: 'bold', padding: 20}}>
             Filter by:
             </Text>
-            <View style={{width: 30, height: 30, backgroundColor: 'red', textAlign: 'center'}}/>
-        </View>
+            <View style={{  width: 45, height: 38, backgroundColor: 'red', margin:5, marginTop: 20}}>
+            <Button  title="O" color = 'red'/>
+            </View>
+            <View style={{ width: 45, height: 38, backgroundColor: 'orange',margin: 5, marginTop:20, textAlign: 'center'}}>
+            <Button  title="I" color = 'orange'/>
+            </View>
+            <View style={{ width: 45, height: 38, backgroundColor: 'green',margin: 5, marginTop:20, textAlign: 'center'}}>
+            <Button  title="P" color = 'green'/>
+            </View>
+            <View style={{ width: 45, height: 38, backgroundColor: 'purple',margin: 5, marginTop:20, textAlign: 'center'}}>
+            <Button  title="A" color = 'purple'/>
+            </View>
+    </View>
 
 
 
@@ -476,15 +489,19 @@ class DescriptionScreen extends React.Component {
 
     return (
 
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Settings!</Text>
-        <Text>Title: {JSON.parse(JSON.stringify(title))}</Text>
-        <Text>Rating: {JSON.parse(JSON.stringify(rating))}</Text>
-        <Text>Description: {JSON.parse(JSON.stringify(description))}</Text>
-        <Text>Catagories: {JSON.parse(JSON.stringify(catagories))}</Text>
+      <View style = {{ flex: 1, padding: 20, backgroundColor: '#808080',alignItems:'center' }}>
+      <Text style = {{backgroundColor: 'gold',fontSize: 25, alignSelf: 'flex-end',textAlign: 'right'}}>{JSON.parse(JSON.stringify(rating))}</Text>
 
-      </View>
-
+      <View style = {styles.descripBox}>
+        <Text style={{ backgroundColor: 'skyblue', margin: 10, justifyContent: 'center', color: 'black', fontSize: 35, fontWeight: 'bold' }}>{JSON.parse(JSON.stringify(title))}</Text>
+        </View>
+        <View style = {styles.descripBox}>
+        <Text style={{  backgroundColor: 'powderblue',margin: 15, justifyContent: 'center', color: 'black',  fontSize: 20 }}>Description: {JSON.parse(JSON.stringify(description))}</Text>
+        </View>
+        <View style = {styles.descripBox}>
+        <Text style={{ backgroundColor: 'steelblue',margin: 10, justifyContent: 'center', color: 'purple', fontSize: 25 }}>Catagories: {JSON.parse(JSON.stringify(catagories))}</Text>
+        </View>
+        </View>
     );
   }
 }
