@@ -1,11 +1,13 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, TextInput, Button, FlatList, Dimensions, Alert } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TextInput, FlatList, Dimensions, Alert } from 'react-native';
 import {Constants} from 'expo';
 import * as firebase from 'firebase';
+
 import { addone, getAllPosts, getSnapshot, sortPosts, signIn,allResponses, enterSleepyNess, sampleData, result, max } from './test_functions.js';
+
 import Slider from "react-native-slider";
-import Icon from 'react-native-vector-icons/FontAwesome';
-import { Divider, Header } from 'react-native-elements';
+import Icon from '@expo/vector-icons/FontAwesome';
+import { Divider, Header, Button, CheckBox } from 'react-native-elements';
 import PureChart from 'react-native-pure-chart';
 
 
@@ -48,13 +50,11 @@ export class HS extends React.Component {
     render() {
 
         return (
-            <View>
-                <Header
-                    style={{position: 'absolute', top: '0'}}
-                    leftComponent={{ icon: 'menu', color: '#fff' }}
-                    centerComponent={{ text: 'NUDGE', style: { fontSize: 28, fontWeight: 'bold', color: '#fff' } }}
-                    rightComponent={{ icon: 'home', color: '#fff' }}
-                />
+
+
+            <ScrollView>
+
+
                 <Text style={HSStyles.nextPLapse}>
                     CURRENT PREDICTED TIREDNESS
                 </Text>
@@ -152,6 +152,10 @@ const HSStyles = {
         marginTop: 20
 //        color: '#ffffff'
     },
+    starImage: {
+        marginTop: 10,
+        marginBottom: 10},
+
     moonImage: {
         textAlign: "center",
         marginTop: 10,
@@ -178,25 +182,29 @@ class SubmissionScreen extends React.Component {
       this.state = {
         title: '',
         text: '',
-        height: 0
+        height: 0,
+        outdoors: false,
+        creative: false,
+        shock: false,
       }
-    }
+      this.fullsend = this.fullsend.bind(this);
+  }
+
+  fullsend () {
+      console.log(this.state.title);
+      console.log(this.state.text);
+      submitCommunityPost(this.state.title, 0, this.state.text, userEmail, [this.state.outdoors, this.state.creative, this.state.shock]);
+  }
 
   render() {
     const { navigation } = this.props;
     const title = navigation.getParam('title', 'NO-ID');
     const rating = navigation.getParam('rating', '99');
     const description = navigation.getParam('description', 'TEST DESCRIPTION');
-    const catagories = navigation.getParam('catagories', [1,0,1]);
 
     return (
 
       <View>
-        <Header
-          leftComponent={{ icon: 'menu', color: '#fff' }}
-          centerComponent={{ text: 'NUDGE', style: { fontSize: 28, fontWeight: 'bold', color: '#fff' } }}
-          rightComponent={{ icon: 'home', color: '#fff' }}
-        />
 
         <Text style={{
                              textAlign: 'center',
@@ -206,15 +214,34 @@ class SubmissionScreen extends React.Component {
                          }}>
             SUBMIT YOUR COMMUNITY POST
         </Text>
+
         <View style={styles.msgBox}>
-          <TextInput style={{}} placeholder='Enter a Title'
+          <TextInput placeholder='Enter a Title'
+            onChangeText={(title) => this.setState({title})}
             value={this.state.title}
-            onChangeText={(message) => this.setState({title: message})}
             style={styles.txtInput}/>
         </View>
         <Divider style={{ backgroundColor: 'gray' }}/>
         <Divider style={{ backgroundColor: 'gray' }}/>
 
+        <View style={{flex: 1, flexDirection: 'row'}}>
+          
+          <CheckBox
+            title='Outdoors'
+            checked={this.state.outdoors}
+            onPress={() => this.setState({outdoors: !this.state.outdoors})}
+          />
+          <CheckBox
+            title='Creative'
+            checked={this.state.creative}
+            onPress={() => this.setState({creative: !this.state.creative})}
+          />
+          <CheckBox
+            title='Shock'
+            checked={this.state.shock}
+            onPress={() => this.setState({shock: !this.state.shock})}
+          />
+        </View>
         <View style={{padding: 40, flexDirection: 'row', justifyContent: 'space-between'}}>
 
         </View>
@@ -225,18 +252,19 @@ class SubmissionScreen extends React.Component {
           <TextInput
             placeholder='Enter your message'
             multiline={true}
+            onChangeText={(text) => this.setState({text})}
             value={this.state.text}
-            onChangeText={(message) => this.setState({text: message})}
             style={styles.txtInput}/>
         </View>
         <Button
             title='SUBMIT'
-            onPress={this.addItem}/>
+            onPress={this.fullsend}/>
       </View>
 
     );
   }
 }
+
 
 export class App extends React.Component {
 
@@ -267,6 +295,47 @@ export class App extends React.Component {
 
    }
 
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <View style={styles.msgBox}>
+          <TextInput placeholder='Enter your message'
+            value={this.state.message}
+            onChangeText={(text) => this.setState({message: text})}
+            style={styles.txtInput}/>
+          <Button title='Send' onPress={this.addItem}/>
+        </View>
+        <FlatList data={this.state.messages}
+          renderItem={
+            ({item}) =>
+            <View style={styles.listItemContainer}>
+              <Text style={styles.listItem}>
+                {item}
+              </Text>
+              <Button
+                title=<Ionicons name="ios-list" size={25} color="black"/>
+                onPress={() => {
+                  /* 1. Navigate to the Details route with params */
+                  this.props.navigation.navigate('DescriptionScreen', {
+                    title: item,
+                    otherParam: 'anything you want here',
+                  });
+                }}
+              />
+            </View>
+          }
+          />
+        <View style={styles.halfo}>
+          <Text style={styles.finn}>
+                {this.state.add_count}
+          </Text>
+
+          <Button title='Add 1 (from external js file)' onPress={this.addit}/>
+        </View>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -307,12 +376,20 @@ const styles = StyleSheet.create({
   msgBox: {
     flexDirection: 'row',
     padding: 20,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    textAlign: 'center',
+    justifyContent: "center",
+    bottom: 10,
   },
   filterBox: {
     flexDirection: 'row',
     backgroundColor: '#4286f4',
     height: 75
+
+  },
+  descripBox: {
+    backgroundColor: 'skyblue',
+
   },
   txtInput: {
     flex: 1
@@ -337,7 +414,20 @@ const styles = StyleSheet.create({
   listItem: {
     fontSize: 20,
     padding: 10
-  }
+  },
+  input: {
+    width: 200,
+    height: 44,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: 'black',
+    marginBottom: 10,
+  },
+  logincontainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+  },
 });
 
 
@@ -375,45 +465,135 @@ class HomeScreen extends React.Component {
   render() {
 
     return (
-      <View style={styles.container}>
+      <View>
+        <Header
+          style={{position: 'absolute', top: '0'}}
+          centerComponent={{
+            text: 'NUDGE',
+            style: {
+              fontSize: 28,
+              fontWeight: 'bold',
+              color: '#fff'
+            }
+          }}
+          rightComponent={{
+            icon: 'home',
+            color: '#fff',
+            onPress: () => {this.props.navigation.navigate('Community');},
+          }}
+        />
+        <View style={styles.yeet}>
+                  <Button
+                color = 'green'
+                title="Create a Nudge"
+                onPress={() => {
+                  /* 1. Navigate to the Details route with params */
+                  this.props.navigation.navigate('SubmissionScreen', {
+                    username: "sdfsdf",
+                    password: "sdfsd",
+                  });
+                }}
+              />
 
+          </View>
         <View style={styles.filterBox}>
             <Text style={{color: 'white', fontSize: 25, fontWeight: 'bold', padding: 20}}>
             Filter by:
             </Text>
-            <View style={{width: 30, height: 30, backgroundColor: 'red', textAlign: 'center'}}/>
-        </View>
+            <View style={{  width: 45, height: 38, backgroundColor: 'red', margin:5, marginTop: 20}}>
+            <Button  title=<Ionicons name="ios-baseball" size={25} color="red"/> backgroundColor = 'red'/>
+            </View>
+            <View style={{ width: 40, height: 35, backgroundColor: 'orange',margin: 5, marginTop:20, textAlign: 'center'}}>
+            <Button  title=<Ionicons name="ios-flash" size={25} color="orange"/>  color = 'orange'/>
+            </View>
+            <View style={{ width: 45, height: 38, backgroundColor: 'green',margin: 5, marginTop:20, textAlign: 'center'}}>
+            <Button title=<Ionicons name="ios-bulb" size={25} color="gold"/>  color = 'green'/>
+            </View>
+    </View>
 
 
 
-        <FlatList data={this.state.messages} //normally data = this.state.messages
+        <FlatList data={this.state.messages}
             renderItem={
               ({item}) =>
               <View style={styles.idea}>
-                <Text style={styles.listItem}>
-                  {item.title}
-                </Text>
+                
+                <Button
+                title={item.title}
+                onPress={() => {
+                  /* 1. Navigate to the Details route with params */
+                  this.props.navigation.navigate('DescriptionScreen', {
+                    title: item.title,
+                    rating: item.score,
+                    description: item.body,
+                    catagories: [1,0,1],
+                  });
+                }}
+              />
                 <Text style={styles.score}>
+                <Ionicons name="ios-star" size={25} color="white"/>
                   {item.score}
                 </Text>
               </View>
             }
         />
 
-        <View style={styles.msgBox}>
-                  <TextInput placeholder='Enter Idea'
-                    /*value={this.state.message}
-
-                    Potential here for onPress to switch UIs
-                    or to expand the bar upwards
-
-                    onChangeText={(text) => this.setState({message: text})}*/
-                    style={styles.txtInput}/>
-                  <Button title='Send' /*onPress={this.addItem}*//>
-                </View>
+        
 
       </View>
 
+    );
+  }
+}
+
+export class LoginScreen extends React.Component {
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      username: '',
+      password: '',
+    }
+
+  }
+
+
+
+  render() {
+    return (
+      <View style={styles.container}>
+
+          <View style={styles.logincontainer}>
+                <TextInput
+                  value={this.state.username}
+                  onChangeText={(username) => this.setState({ username })}
+                  placeholder={'Username'}
+                  style={styles.input}
+                />
+                <TextInput
+                  value={this.state.password}
+                  onChangeText={(password) => this.setState({ password })}
+                  placeholder={'Password'}
+                  secureTextEntry={true}
+                  style={styles.input}
+                />
+
+
+              <Button
+                title="Log In"
+                onPress={() => {
+                  /* 1. Navigate to the Details route with params */
+                  this.props.navigation.navigate('MyNudge', {
+                    username: this.state.username,
+                    password: this.state.password,
+                  });
+                }}
+              />
+
+          </View>
+
+      </View>
     );
   }
 }
@@ -428,15 +608,22 @@ class DescriptionScreen extends React.Component {
 
     return (
 
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Settings!</Text>
-        <Text>Title: {JSON.parse(JSON.stringify(title))}</Text>
-        <Text>Rating: {JSON.parse(JSON.stringify(rating))}</Text>
-        <Text>Description: {JSON.parse(JSON.stringify(description))}</Text>
-        <Text>Catagories: {JSON.parse(JSON.stringify(catagories))}</Text>
 
+      <View style = {{ flex: 1, padding: 20, backgroundColor: 'skyblue',  }}>
+      <View style = {{flexDirection: 'row', backgroundColor: 'gold',fontSize: 25,textAlign: 'right', alignSelf: 'flex-end'}}>
+      <Ionicons name="ios-star" size={25} color="black"/>
+      <Text style = {{fontSize:25}}>{JSON.parse(JSON.stringify(rating))}</Text>
       </View>
-
+      <View style = {styles.descripBox}>
+        <Text style={{ backgroundColor: 'skyblue', margin: 10,  color: 'black', fontSize: 35, fontWeight: 'bold' }}>{JSON.parse(JSON.stringify(title))}</Text>
+        </View>
+        <View style = {styles.descripBox}>
+        <Text style={{  backgroundColor: 'skyblue',margin: 15, color: 'black',  fontSize: 25 }}>Description: {JSON.parse(JSON.stringify(description))}</Text>
+        </View>
+        <View style = {styles.descripBox}>
+        <Text style={{ backgroundColor: 'skyblue', margin: 10, color: 'purple', fontSize: 20 }}>Catagories: {JSON.parse(JSON.stringify(catagories))}</Text>
+        </View>
+        </View>
     );
   }
 }
@@ -472,21 +659,17 @@ class IconWithBadge extends React.Component {
   }
 }
 
-const HomeIconWithBadge = props => {
-  // You should pass down the badgeCount in some other ways like context, redux, mobx or event emitters.
-  return <IconWithBadge {...props} badgeCount={3} />;
-};
+
 
 const getTabBarIcon = (navigation, focused, tintColor) => {
   const { routeName } = navigation.state;
   let IconComponent = Ionicons;
   let iconName;
-  if (routeName === 'Home') {
-    iconName = `ios-information-circle${focused ? '' : '-outline'}`;
-    // We want to add badges to home tab icon
-    IconComponent = HomeIconWithBadge;
-  } else if (routeName === 'Settings') {
-    iconName = `ios-options${focused ? '' : '-outline'}`;
+  if (routeName === 'Community') {
+    iconName = `ios-home${focused ? '' : '-outline'}`;
+
+  } else if (routeName === 'SwitchAccount') {
+    iconName = `ios-arrow-back${focused ? '' : '-outline'}`;
   }
 
   // You can return any component that you like here!
@@ -494,17 +677,60 @@ const getTabBarIcon = (navigation, focused, tintColor) => {
 };
 
 const HomeStack = createStackNavigator({
-  Home: { screen: HomeScreen },
+  Community: { screen: HomeScreen },
+  
+});
+
+const HSStack = createStackNavigator({
+  HS: { screen: HS },
+  SubmissionScreen: { screen: SubmissionScreen },
   DescriptionScreen: { screen: DescriptionScreen },
 });
 
 export default createAppContainer(
   createBottomTabNavigator(
     {
-      App: { screen: App },
-      HomeScreen: {screen: HS},
-      Community: {screen: SubmissionScreen}
+
+      SwitchAccount: { screen: LoginScreen,
+                     navigationOptions: { tabBarVisible: false,
+                                     tabBarIcon: ({ tintColor }) => (
+                                     <Icon
+                                          name="refresh"
+                                          color={tintColor}
+                                          size={24}
+                                      />
+      )}
+
+                      },
+
+      Community: { screen: HomeScreen, 
+                     navigationOptions: { tabBarVisible: true, 
+
+                                     tabBarIcon: ({ tintColor }) => (
+                                     <Icon
+                                          name="home"
+                                          color={tintColor}
+                                          size={24}
+                                      />
+      )}
+
+                       },
+
+      MyNudge: { screen: HSStack,
+                     navigationOptions: { tabBarVisible: true,
+                                     tabBarIcon: ({ tintColor }) => (
+                                     <Icon
+                                          name="user"
+                                          color={tintColor}
+                                          size={24}
+                                      />
+      )}
+
+                       },
+//
+
     },
+
     {
       defaultNavigationOptions: ({ navigation }) => ({
         tabBarIcon: ({ focused, tintColor }) =>

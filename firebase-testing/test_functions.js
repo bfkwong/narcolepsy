@@ -68,24 +68,26 @@ export function sortPosts(messages) {
 }
 
 export class Post {
-    constructor(title, score, body, author) {
+    constructor(title, score, body, author, filter) {
         this.title = title;
         this.score = score;
         this.body = body;
         this.author = author;
+        this.filters = filter
     }
 }
 
 export function getAllPosts(snapshotObj) {
    let newObj;
-   let tempBody, tempScore, tempTitle, tempAuthor;
+   let tempBody, tempScore, tempTitle, tempAuthor, tempFilters;
    for (val in snapshotObj) {
       tempBody = snapshotObj[val]["body"];
       tempScore =  snapshotObj[val]["score"];
       tempTitle = snapshotObj[val]["title"];
-      tempAuthor = snapshotObj[val]["author"]
+      tempAuthor = snapshotObj[val]["author"];
+      tempFilters = snapshotObj[val]["filters"] //Here?
 
-      newObj = new Post(tempTitle, tempScore, tempBody, tempAuthor);
+      newObj = new Post(tempTitle, tempScore, tempBody, tempAuthor, tempFilters);
 
       allResponses.push(newObj);
    }
@@ -168,4 +170,12 @@ export function retrainModel(obj) {
 export function enterSleepyNess(time, awakeness) {
     var timeStampMSecs = (time.getHours()*60) + time.getMinutes();
     database.ref("user/" + userEmail + "/sleepyTime").push({time: timeStampMSecs, awake: awakeness});
+}
+
+export function submitCommunityPost(title, body, score, author, filters) {
+    let post = new Post(title, body, score, author, filters);
+
+
+    database.ref("posts").push(post);
+    return 0;
 }
