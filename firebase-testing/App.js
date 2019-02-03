@@ -168,6 +168,10 @@ const HSStyles = {
         marginTop: 20
 //        color: '#ffffff'
     },
+    starImage: {
+        marginTop: 10,
+        marginBottom: 10},
+
     moonImage: {
         textAlign: "center",
         marginTop: 10,
@@ -385,6 +389,10 @@ const styles = StyleSheet.create({
     height: 75
 
   },
+  descripBox: {
+    backgroundColor: 'skyblue',
+
+  },
   txtInput: {
     flex: 1
   },
@@ -557,7 +565,7 @@ export class LoginScreen extends React.Component {
 
   }
 
-  
+
 
   render() {
     return (
@@ -577,8 +585,8 @@ export class LoginScreen extends React.Component {
                   secureTextEntry={true}
                   style={styles.input}
                 />
-                
-                
+
+
               <Button
                 title="Log In"
                 onPress={() => {
@@ -590,8 +598,8 @@ export class LoginScreen extends React.Component {
                 }}
               />
 
-          </View>  
-        
+          </View>
+
       </View>
     );
   }
@@ -628,14 +636,19 @@ class DescriptionScreen extends React.Component {
 
       <Text style = {{backgroundColor: 'gold',fontSize: 25, alignSelf: 'flex-end',textAlign: 'right'}}>{JSON.parse(JSON.stringify(rating))}</Text>
 
+<View style = {{ flex: 1, padding: 20, backgroundColor: 'skyblue',  }}>
+      <View style = {{flexDirection: 'row', backgroundColor: 'gold',fontSize: 25,textAlign: 'right', alignSelf: 'flex-end'}}>
+      <Ionicons name="ios-star" size={25} color="black"/>
+      <Text style = {{fontSize:25}}>{JSON.parse(JSON.stringify(rating))}</Text>
+      </View>
       <View style = {styles.descripBox}>
-        <Text style={{ backgroundColor: 'skyblue', margin: 10, justifyContent: 'center', color: 'black', fontSize: 35, fontWeight: 'bold' }}>{JSON.parse(JSON.stringify(title))}</Text>
+        <Text style={{ backgroundColor: 'skyblue', margin: 10,  color: 'black', fontSize: 35, fontWeight: 'bold' }}>{JSON.parse(JSON.stringify(title))}</Text>
         </View>
         <View style = {styles.descripBox}>
-        <Text style={{  backgroundColor: 'powderblue',margin: 15, justifyContent: 'center', color: 'black',  fontSize: 20 }}>Description: {JSON.parse(JSON.stringify(description))}</Text>
+        <Text style={{  backgroundColor: 'skyblue',margin: 15, color: 'black',  fontSize: 25 }}>Description: {JSON.parse(JSON.stringify(description))}</Text>
         </View>
         <View style = {styles.descripBox}>
-        <Text style={{ backgroundColor: 'steelblue',margin: 10, justifyContent: 'center', color: 'purple', fontSize: 25 }}>Catagories: {JSON.parse(JSON.stringify(catagories))}</Text>
+        <Text style={{ backgroundColor: 'skyblue', margin: 10, color: 'purple', fontSize: 20 }}>Catagories: {JSON.parse(JSON.stringify(catagories))}</Text>
         </View>
         </View>
     );
@@ -702,8 +715,8 @@ export default createAppContainer(
   createBottomTabNavigator(
     {
 
-      SwitchAccount: { screen: LoginScreen, 
-                     navigationOptions: { tabBarVisible: false, 
+      SwitchAccount: { screen: LoginScreen,
+                     navigationOptions: { tabBarVisible: false,
                                      tabBarIcon: ({ tintColor }) => (
                                      <Icon
                                           name="refresh"
@@ -714,8 +727,8 @@ export default createAppContainer(
 
                       },
 
-      Community: { screen: HomeStack, 
-                     navigationOptions: { tabBarVisible: true, 
+      Community: { screen: HomeStack,
+                     navigationOptions: { tabBarVisible: true,
                                      tabBarIcon: ({ tintColor }) => (
                                      <Icon
                                           name="home"
@@ -725,6 +738,7 @@ export default createAppContainer(
       )}
 
                        },
+
       MyNudge: { screen: HSStack, 
                      navigationOptions: { tabBarVisible: true, 
                                      tabBarIcon: ({ tintColor }) => (
