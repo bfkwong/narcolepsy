@@ -44,21 +44,9 @@ export class HS extends React.Component {
         let sampleData = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 
         return (
+
             <ScrollView>
-                <Header
-                    style={{position: 'absolute', top: '0'}}
-                    /*leftComponent={{
-                        icon: 'menu',
-                        color: '#fff',
-                        onPress: () => {this.props.navigation.navigate('YEETGOD');},
-                    }}*/
-                    centerComponent={{ text: 'NUDGE', style: { fontSize: 28, fontWeight: 'bold', color: '#fff' } }}
-                    rightComponent={{
-                        icon: 'home',
-                        color: '#fff',
-                        onPress: () => {this.props.navigation.navigate('Community');},
-                    }}
-                />
+
                 <Text style={HSStyles.nextPLapse}>
                     NEXT PREDICTED LAPSE
                 </Text>
@@ -204,34 +192,23 @@ class SubmissionScreen extends React.Component {
         shock: false,
       }
 
-    }
+      this.highlight = this.highlight.bind(this);
+  }
+
+  highlight () {
+
+  }
+
 
   render() {
     const { navigation } = this.props;
     const title = navigation.getParam('title', 'NO-ID');
     const rating = navigation.getParam('rating', '99');
     const description = navigation.getParam('description', 'TEST DESCRIPTION');
-    const catagories = navigation.getParam('catagories', [1,0,1]);
 
     return (
 
       <View>
-        <Header
-            style={{position: 'absolute', top: '0'}}
-            centerComponent={{
-                text: 'NUDGE',
-                style: {
-                    fontSize: 28,
-                    fontWeight: 'bold',
-                    color: '#fff'
-                }
-            }}
-            rightComponent={{
-                icon: 'home',
-                color: '#fff',
-                onPress: () => {this.props.navigation.navigate('Community');},
-            }}
-        />
 
         <Text style={{
                              textAlign: 'center',
@@ -249,6 +226,7 @@ class SubmissionScreen extends React.Component {
         </View>
         <Divider style={{ backgroundColor: 'gray' }}/>
         <Divider style={{ backgroundColor: 'gray' }}/>
+
         <View style={{flex: 1, flexDirection: 'row'}}>
           
           <CheckBox
@@ -489,22 +467,21 @@ class HomeScreen extends React.Component {
 
     return (
       <View>
-
         <Header
-                    style={{position: 'absolute', top: '0'}}
-                    centerComponent={{
-                        text: 'NUDGE',
-                        style: {
-                            fontSize: 28,
-                            fontWeight: 'bold',
-                            color: '#fff'
-                        }
-                    }}
-                    rightComponent={{
-                        icon: 'home',
-                        color: '#fff',
-                        onPress: () => {this.props.navigation.navigate('Community');},
-                    }}
+          style={{position: 'absolute', top: '0'}}
+          centerComponent={{
+            text: 'NUDGE',
+            style: {
+              fontSize: 28,
+              fontWeight: 'bold',
+              color: '#fff'
+            }
+          }}
+          rightComponent={{
+            icon: 'home',
+            color: '#fff',
+            onPress: () => {this.props.navigation.navigate('Community');},
+          }}
         />
 
         <View style={styles.filterBox}>
@@ -524,7 +501,7 @@ class HomeScreen extends React.Component {
 
 
 
-        <FlatList data={this.state.messages} //normally data = this.state.messages
+        <FlatList data={this.state.messages}
             renderItem={
               ({item}) =>
               <View style={styles.idea}>
@@ -631,6 +608,7 @@ class DescriptionScreen extends React.Component {
     const catagories = navigation.getParam('catagories', [1,0,1]);
 
     return (
+
 
       <View style = {{ flex: 1, padding: 20, backgroundColor: 'skyblue',  }}>
       <View style = {{flexDirection: 'row', backgroundColor: 'gold',fontSize: 25,textAlign: 'right', alignSelf: 'flex-end'}}>
