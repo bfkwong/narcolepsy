@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, ScrollView, TextInput, FlatList, Dimensions, Al
 import {Constants} from 'expo';
 import * as firebase from 'firebase';
 
-import { submitCommunityPost, addone, getAllPosts, getSnapshot, sortPosts, signIn,allResponses, enterSleepyNess, sampleData, result, max } from './test_functions.js';
+import { submitCommunityPost, userEmail, addone, getAllPosts, getSnapshot, sortPosts, signIn,allResponses, enterSleepyNess, sampleData, result, max } from './test_functions.js';
 
 import Slider from "react-native-slider";
 import Icon from '@expo/vector-icons/FontAwesome';
@@ -193,6 +193,10 @@ class SubmissionScreen extends React.Component {
       console.log(this.state.title);
       console.log(this.state.text);
       submitCommunityPost(this.state.title, 0, this.state.text, userEmail, [this.state.outdoors, this.state.creative, this.state.shock]);
+      this.props.navigation.navigate('Community', {
+                    title: 'item',
+                    otherParam: 'anything you want here',
+                  });
   }
 
   render() {
