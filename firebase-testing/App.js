@@ -47,9 +47,17 @@ export class HS extends React.Component {
             <ScrollView>
                 <Header
                     style={{position: 'absolute', top: '0'}}
-                    leftComponent={{ icon: 'menu', color: '#fff' }}
+                    /*leftComponent={{
+                        icon: 'menu',
+                        color: '#fff',
+                        onPress: () => {this.props.navigation.navigate('YEETGOD');},
+                    }}*/
                     centerComponent={{ text: 'NUDGE', style: { fontSize: 28, fontWeight: 'bold', color: '#fff' } }}
-                    rightComponent={{ icon: 'home', color: '#fff' }}
+                    rightComponent={{
+                        icon: 'home',
+                        color: '#fff',
+                        onPress: () => {this.props.navigation.navigate('Community');},
+                    }}
                 />
                 <Text style={HSStyles.nextPLapse}>
                     NEXT PREDICTED LAPSE
@@ -160,6 +168,10 @@ const HSStyles = {
         marginTop: 20
 //        color: '#ffffff'
     },
+    starImage: {
+        marginTop: 10,
+        marginBottom: 10},
+
     moonImage: {
         textAlign: "center",
         marginTop: 10,
@@ -205,9 +217,20 @@ class SubmissionScreen extends React.Component {
 
       <View>
         <Header
-          leftComponent={{ icon: 'menu', color: '#fff' }}
-          centerComponent={{ text: 'NUDGE', style: { fontSize: 28, fontWeight: 'bold', color: '#fff' } }}
-          rightComponent={{ icon: 'home', color: '#fff' }}
+            style={{position: 'absolute', top: '0'}}
+            centerComponent={{
+                text: 'NUDGE',
+                style: {
+                    fontSize: 28,
+                    fontWeight: 'bold',
+                    color: '#fff'
+                }
+            }}
+            rightComponent={{
+                icon: 'home',
+                color: '#fff',
+                onPress: () => {this.props.navigation.navigate('Community');},
+            }}
         />
 
         <Text style={{
@@ -387,6 +410,10 @@ const styles = StyleSheet.create({
     height: 75
 
   },
+  descripBox: {
+    backgroundColor: 'skyblue',
+
+  },
   txtInput: {
     flex: 1
   },
@@ -461,7 +488,24 @@ class HomeScreen extends React.Component {
   render() {
 
     return (
-      <View style={styles.container}>
+      <View>
+
+        <Header
+                    style={{position: 'absolute', top: '0'}}
+                    centerComponent={{
+                        text: 'NUDGE',
+                        style: {
+                            fontSize: 28,
+                            fontWeight: 'bold',
+                            color: '#fff'
+                        }
+                    }}
+                    rightComponent={{
+                        icon: 'home',
+                        color: '#fff',
+                        onPress: () => {this.props.navigation.navigate('Community');},
+                    }}
+        />
 
         <View style={styles.filterBox}>
             <Text style={{color: 'white', fontSize: 25, fontWeight: 'bold', padding: 20}}>
@@ -540,12 +584,12 @@ export class LoginScreen extends React.Component {
 
   }
 
-  
+
 
   render() {
     return (
       <View style={styles.container}>
-        
+
           <View style={styles.logincontainer}>
                 <TextInput
                   value={this.state.username}
@@ -560,8 +604,8 @@ export class LoginScreen extends React.Component {
                   secureTextEntry={true}
                   style={styles.input}
                 />
-                
-                
+
+
               <Button
                 title="Log In"
                 onPress={() => {
@@ -573,8 +617,8 @@ export class LoginScreen extends React.Component {
                 }}
               />
 
-          </View>  
-        
+          </View>
+
       </View>
     );
   }
@@ -590,17 +634,19 @@ class DescriptionScreen extends React.Component {
 
     return (
 
-      <View style = {{ flex: 1, padding: 20, backgroundColor: '#808080',alignItems:'center' }}>
-      <Text style = {{backgroundColor: 'gold',fontSize: 25, alignSelf: 'flex-end',textAlign: 'right'}}>{JSON.parse(JSON.stringify(rating))}</Text>
-
+      <View style = {{ flex: 1, padding: 20, backgroundColor: 'skyblue',  }}>
+      <View style = {{flexDirection: 'row', backgroundColor: 'gold',fontSize: 25,textAlign: 'right', alignSelf: 'flex-end'}}>
+      <Ionicons name="ios-star" size={25} color="black"/>
+      <Text style = {{fontSize:25}}>{JSON.parse(JSON.stringify(rating))}</Text>
+      </View>
       <View style = {styles.descripBox}>
-        <Text style={{ backgroundColor: 'skyblue', margin: 10, justifyContent: 'center', color: 'black', fontSize: 35, fontWeight: 'bold' }}>{JSON.parse(JSON.stringify(title))}</Text>
+        <Text style={{ backgroundColor: 'skyblue', margin: 10,  color: 'black', fontSize: 35, fontWeight: 'bold' }}>{JSON.parse(JSON.stringify(title))}</Text>
         </View>
         <View style = {styles.descripBox}>
-        <Text style={{  backgroundColor: 'powderblue',margin: 15, justifyContent: 'center', color: 'black',  fontSize: 20 }}>Description: {JSON.parse(JSON.stringify(description))}</Text>
+        <Text style={{  backgroundColor: 'skyblue',margin: 15, color: 'black',  fontSize: 25 }}>Description: {JSON.parse(JSON.stringify(description))}</Text>
         </View>
         <View style = {styles.descripBox}>
-        <Text style={{ backgroundColor: 'steelblue',margin: 10, justifyContent: 'center', color: 'purple', fontSize: 25 }}>Catagories: {JSON.parse(JSON.stringify(catagories))}</Text>
+        <Text style={{ backgroundColor: 'skyblue', margin: 10, color: 'purple', fontSize: 20 }}>Catagories: {JSON.parse(JSON.stringify(catagories))}</Text>
         </View>
         </View>
     );
@@ -638,6 +684,8 @@ class IconWithBadge extends React.Component {
   }
 }
 
+
+
 const getTabBarIcon = (navigation, focused, tintColor) => {
   const { routeName } = navigation.state;
   let IconComponent = Ionicons;
@@ -668,8 +716,8 @@ export default createAppContainer(
   createBottomTabNavigator(
     {
 
-      SwitchAccount: { screen: LoginScreen, 
-                     navigationOptions: { tabBarVisible: false, 
+      SwitchAccount: { screen: LoginScreen,
+                     navigationOptions: { tabBarVisible: false,
                                      tabBarIcon: ({ tintColor }) => (
                                      <Icon
                                           name="refresh"
@@ -682,6 +730,7 @@ export default createAppContainer(
 
       Community: { screen: HomeScreen, 
                      navigationOptions: { tabBarVisible: true, 
+
                                      tabBarIcon: ({ tintColor }) => (
                                      <Icon
                                           name="home"
@@ -691,8 +740,9 @@ export default createAppContainer(
       )}
 
                        },
-      MyNudge: { screen: HSStack, 
-                     navigationOptions: { tabBarVisible: true, 
+
+      MyNudge: { screen: HSStack,
+                     navigationOptions: { tabBarVisible: true,
                                      tabBarIcon: ({ tintColor }) => (
                                      <Icon
                                           name="user"
