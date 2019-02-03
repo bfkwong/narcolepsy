@@ -44,7 +44,7 @@ export class HS extends React.Component {
         let sampleData = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 
         return (
-            <ScrollView>
+            <View>
                 <Header
                     style={{position: 'absolute', top: '0'}}
                     leftComponent={{ icon: 'menu', color: '#fff' }}
@@ -84,18 +84,7 @@ export class HS extends React.Component {
                     />
                     <Text>Value: {this.state.value}</Text>
                 </View>
-                <Divider style={HSStyles.divider} />
-                <View style={HSStyles.graphView}>
-                    <Text style={HSStyles.sleepPatternTitle}>
-                        YOUR SLEEP PATTERN
-                    </Text>
-                    <PureChart
-                        data={sampleData}
-                        type='line'
-                        height={200}/>
-                </View>
-
-            </ScrollView>
+            </View>
         );
     }
 
