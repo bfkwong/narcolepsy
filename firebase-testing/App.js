@@ -598,6 +598,14 @@ export class LoginScreen extends React.Component {
 }
 
 class DescriptionScreen extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      rating: 0,
+    }
+
+  }
   render() {
     const { navigation } = this.props;
     const title = navigation.getParam('title', 'NO-ID');
@@ -610,8 +618,11 @@ class DescriptionScreen extends React.Component {
 
       <View style = {{ flex: 1, padding: 20, backgroundColor: 'skyblue',  }}>
       <View style = {{flexDirection: 'row', backgroundColor: 'gold',fontSize: 25,textAlign: 'right', alignSelf: 'flex-end'}}>
+      <Button
+      title = <Ionicons name="ios-arrow-up" size={25} color="black"/>
+      onPress = {() => this.setState({rating: this.state.rating+1})  }/>
       <Ionicons name="ios-star" size={25} color="black"/>
-      <Text style = {{fontSize:25}}>{JSON.parse(JSON.stringify(rating))}</Text>
+      <Text style = {{fontSize:25}}>{(JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(rating))+this.state.rating)))}</Text>
       </View>
       <View style = {styles.descripBox}>
         <Text style={{ backgroundColor: 'skyblue', margin: 10,  color: 'black', fontSize: 35, fontWeight: 'bold' }}>{JSON.parse(JSON.stringify(title))}</Text>
