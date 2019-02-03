@@ -1,8 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, TextInput, Button, FlatList, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TextInput, Button, FlatList, Dimensions, Alert } from 'react-native';
 import {Constants} from 'expo';
 import * as firebase from 'firebase';
-import { addone, getAllPosts, getSnapshot, sortPosts, signIn,allResponses } from './test_functions.js';
+import { addone, getAllPosts, getSnapshot, sortPosts, signIn,allResponses, enterSleepyNess } from './test_functions.js';
 import Slider from "react-native-slider";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Divider, Header } from 'react-native-elements';
@@ -14,31 +14,25 @@ let database = firebase.database();
 
 export class HS extends React.Component {
 
-      constructor() {
+    constructor() {
         super();
+        this.submitSleep = this.submitSleep.bind(this);
+        this.state = { value: 50 };
+    }
 
-        this.state = {
-          data: {
-            datasets: [{
-              yValues: [100, 105, 102, 110],
-              label: 'Data set 1',
-              config: {
-                color: 'teal'
-              }
-            }, {
-              yValues: [110, 100, 105, 108],
-              label: 'Data set 2',
-              config: {
-                color: 'orange'
-              }
-            }],
-            xValues: ['Q1', 'Q2', 'Q3', 'Q4']
-          }
-        };
-      }
-
-    state = {
-        value: 0
+    submitSleep() {
+        let time = new Date();
+        console.log("This Value" + this.state.value);
+        console.log("This Time" + time);
+        enterSleepyNess(time, this.state.value);
+        Alert.alert(
+          'SUBMITTED',
+          'Data entered at ' + time.getHours() + ':' + time.getMinutes() + ' GMT for ' + this.state.value + '% sleepiness.',
+          [
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ],
+          {cancelable: false},
+        );
     }
 
     componentDidMount() {
@@ -86,7 +80,9 @@ export class HS extends React.Component {
                     <Button
                       title="Submit"
                       type="Submit"
+                      onPress={this.submitSleep}
                     />
+                    <Text>Value: {this.state.value}</Text>
                 </View>
                 <Divider style={HSStyles.divider} />
                 <View style={HSStyles.graphView}>
@@ -181,6 +177,75 @@ const HSStyles = {
     }
 
 }
+
+class SubmissionScreen extends React.Component {
+
+  constructor(props) {
+      super(props)
+
+      this.state = {
+        title: '',
+        text: '',
+        height: 0
+      }
+    }
+
+  render() {
+    const { navigation } = this.props;
+    const title = navigation.getParam('title', 'NO-ID');
+    const rating = navigation.getParam('rating', '99');
+    const description = navigation.getParam('description', 'TEST DESCRIPTION');
+    const catagories = navigation.getParam('catagories', [1,0,1]);
+
+    return (
+
+      <View>
+        <Header
+          leftComponent={{ icon: 'menu', color: '#fff' }}
+          centerComponent={{ text: 'NUDGE', style: { fontSize: 28, fontWeight: 'bold', color: '#fff' } }}
+          rightComponent={{ icon: 'home', color: '#fff' }}
+        />
+
+        <Text style={{
+                             textAlign: 'center',
+                             fontWeight: '500',
+                             fontSize: 20,
+                             marginTop: 20
+                         }}>
+            SUBMIT YOUR COMMUNITY POST
+        </Text>
+        <View style={styles.msgBox}>
+          <TextInput style={{}} placeholder='Enter a Title'
+            value={this.state.title}
+            onChangeText={(message) => this.setState({title: message})}
+            style={styles.txtInput}/>
+        </View>
+        <Divider style={{ backgroundColor: 'gray' }}/>
+        <Divider style={{ backgroundColor: 'gray' }}/>
+
+        <View style={{padding: 40, flexDirection: 'row', justifyContent: 'space-between'}}>
+
+        </View>
+
+        <Divider style={{ backgroundColor: 'gray' }}/>
+        <Divider style={{ backgroundColor: 'gray' }}/>
+        <View style={styles.msgBox}>
+          <TextInput
+            placeholder='Enter your message'
+            multiline={true}
+            value={this.state.text}
+            onChangeText={(message) => this.setState({text: message})}
+            style={styles.txtInput}/>
+        </View>
+        <Button
+            title='SUBMIT'
+            onPress={this.addItem}/>
+      </View>
+
+    );
+  }
+}
+
 
 
 export class App extends React.Component {
@@ -502,9 +567,8 @@ export default createAppContainer(
   createBottomTabNavigator(
     {
       App: { screen: App },
-      Home: { screen: HomeStack },
-      HomeScreen: {screen: HS}
-
+      HomeScreen: {screen: HS},
+      Community: {screen: SubmissionScreen}
     },
     {
       defaultNavigationOptions: ({ navigation }) => ({
