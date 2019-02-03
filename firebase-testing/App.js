@@ -210,14 +210,7 @@ class SubmissionScreen extends React.Component {
 
       <View>
 
-        <Text style={{
-                             textAlign: 'center',
-                             fontWeight: '500',
-                             fontSize: 20,
-                             marginTop: 20
-                         }}>
-            SUBMIT YOUR COMMUNITY POST
-        </Text>
+ 
         <View style={styles.msgBox}>
           <TextInput style={{}} placeholder='Enter a Title'
             value={this.state.title}
@@ -381,6 +374,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     textAlign: 'center',
     justifyContent: "center",
+    bottom: 10,
   },
   filterBox: {
     flexDirection: 'row',
@@ -483,7 +477,20 @@ class HomeScreen extends React.Component {
             onPress: () => {this.props.navigation.navigate('Community');},
           }}
         />
+        <View style={styles.yeet}>
+                  <Button
+                color = 'green'
+                title="Create a Nudge"
+                onPress={() => {
+                  /* 1. Navigate to the Details route with params */
+                  this.props.navigation.navigate('SubmissionScreen', {
+                    username: "sdfsdf",
+                    password: "sdfsd",
+                  });
+                }}
+              />
 
+          </View>
         <View style={styles.filterBox}>
             <Text style={{color: 'white', fontSize: 25, fontWeight: 'bold', padding: 20}}>
             Filter by:
@@ -526,20 +533,7 @@ class HomeScreen extends React.Component {
             }
         />
 
-        <View style={styles.msgBox}>
-                  <Button
-                color = 'green'
-                title="Create a Nudge"
-                onPress={() => {
-                  /* 1. Navigate to the Details route with params */
-                  this.props.navigation.navigate('SubmissionScreen', {
-                    username: "sdfsdf",
-                    password: "sdfsd",
-                  });
-                }}
-              />
-
-                </View>
+        
 
       </View>
 
