@@ -47,9 +47,17 @@ export class HS extends React.Component {
             <ScrollView>
                 <Header
                     style={{position: 'absolute', top: '0'}}
-                    leftComponent={{ icon: 'menu', color: '#fff' }}
+                    /*leftComponent={{
+                        icon: 'menu',
+                        color: '#fff',
+                        onPress: () => {this.props.navigation.navigate('YEETGOD');},
+                    }}*/
                     centerComponent={{ text: 'NUDGE', style: { fontSize: 28, fontWeight: 'bold', color: '#fff' } }}
-                    rightComponent={{ icon: 'home', color: '#fff' }}
+                    rightComponent={{
+                        icon: 'home',
+                        color: '#fff',
+                        onPress: () => {this.props.navigation.navigate('Community');},
+                    }}
                 />
                 <Text style={HSStyles.nextPLapse}>
                     NEXT PREDICTED LAPSE
@@ -201,9 +209,20 @@ class SubmissionScreen extends React.Component {
 
       <View>
         <Header
-          leftComponent={{ icon: 'menu', color: '#fff' }}
-          centerComponent={{ text: 'NUDGE', style: { fontSize: 28, fontWeight: 'bold', color: '#fff' } }}
-          rightComponent={{ icon: 'home', color: '#fff' }}
+            style={{position: 'absolute', top: '0'}}
+            centerComponent={{
+                text: 'NUDGE',
+                style: {
+                    fontSize: 28,
+                    fontWeight: 'bold',
+                    color: '#fff'
+                }
+            }}
+            rightComponent={{
+                icon: 'home',
+                color: '#fff',
+                onPress: () => {this.props.navigation.navigate('Community');},
+            }}
         />
 
         <Text style={{
@@ -440,7 +459,24 @@ class HomeScreen extends React.Component {
   render() {
 
     return (
-      <View style={styles.container}>
+      <View>
+
+        <Header
+                    style={{position: 'absolute', top: '0'}}
+                    centerComponent={{
+                        text: 'NUDGE',
+                        style: {
+                            fontSize: 28,
+                            fontWeight: 'bold',
+                            color: '#fff'
+                        }
+                    }}
+                    rightComponent={{
+                        icon: 'home',
+                        color: '#fff',
+                        onPress: () => {this.props.navigation.navigate('Community');},
+                    }}
+        />
 
         <View style={styles.filterBox}>
             <Text style={{color: 'white', fontSize: 25, fontWeight: 'bold', padding: 20}}>
@@ -526,7 +562,7 @@ export class LoginScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        
+
           <View style={styles.logincontainer}>
                 <TextInput
                   value={this.state.username}
@@ -572,6 +608,24 @@ class DescriptionScreen extends React.Component {
     return (
 
       <View style = {{ flex: 1, padding: 20, backgroundColor: '#808080',alignItems:'center' }}>
+
+      <Header
+                  style={{position: 'absolute', top: '0'}}
+                  centerComponent={{
+                      text: 'NUDGE',
+                      style: {
+                          fontSize: 28,
+                          fontWeight: 'bold',
+                          color: '#fff'
+                      }
+                  }}
+                  rightComponent={{
+                      icon: 'home',
+                      color: '#fff',
+                      onPress: () => {this.props.navigation.navigate('Community');},
+                  }}
+      />
+
       <Text style = {{backgroundColor: 'gold',fontSize: 25, alignSelf: 'flex-end',textAlign: 'right'}}>{JSON.parse(JSON.stringify(rating))}</Text>
 
       <View style = {styles.descripBox}>
