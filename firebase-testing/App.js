@@ -1,12 +1,13 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, TextInput, Button, FlatList, Dimensions, Alert } from 'react-native';
+import { StyleSheet, StatusBar, Text, View, ScrollView, TextInput, Button, FlatList, Dimensions, Alert } from 'react-native';
 import {Constants} from 'expo';
 import * as firebase from 'firebase';
 import { addone, getAllPosts, getSnapshot, sortPosts, signIn,allResponses, enterSleepyNess } from './test_functions.js';
 import Slider from "react-native-slider";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Divider, Header } from 'react-native-elements';
-import PureChart from 'react-native-pure-chart';
+import LineChart from "react-native-responsive-linechart";
+
 
 
 console.disableYellowBox = true;
@@ -186,129 +187,44 @@ class SubmissionScreen extends React.Component {
     const description = navigation.getParam('description', 'TEST DESCRIPTION');
     const catagories = navigation.getParam('catagories', [1,0,1]);
 
-    return (
 
-      <View>
-        <Header
-          leftComponent={{ icon: 'menu', color: '#fff' }}
-          centerComponent={{ text: 'NUDGE', style: { fontSize: 28, fontWeight: 'bold', color: '#fff' } }}
-          rightComponent={{ icon: 'home', color: '#fff' }}
-        />
-
-        <Text style={{
-                             textAlign: 'center',
-                             fontWeight: '500',
-                             fontSize: 20,
-                             marginTop: 20
-                         }}>
-            SUBMIT YOUR COMMUNITY POST
-        </Text>
-        <View style={styles.msgBox}>
-          <TextInput style={{}} placeholder='Enter a Title'
-            value={this.state.title}
-            onChangeText={(message) => this.setState({title: message})}
-            style={styles.txtInput}/>
-        </View>
-        <Divider style={{ backgroundColor: 'gray' }}/>
-        <Divider style={{ backgroundColor: 'gray' }}/>
-
-        <View style={{padding: 40, flexDirection: 'row', justifyContent: 'space-between'}}>
-
-        </View>
-
-        <Divider style={{ backgroundColor: 'gray' }}/>
-        <Divider style={{ backgroundColor: 'gray' }}/>
-        <View style={styles.msgBox}>
-          <TextInput
-            placeholder='Enter your message'
-            multiline={true}
-            value={this.state.text}
-            onChangeText={(message) => this.setState({text: message})}
-            style={styles.txtInput}/>
-        </View>
-        <Button
-            title='SUBMIT'
-            onPress={this.addItem}/>
-      </View>
-
-    );
   }
 }
 
+const data = [-10, -15, 40, 19, 32, 15, 52, 55, 20, 60, 78, 42, 56];
+const config = {
+      line: {
+        strokeWidth: 1,
+        strokeColor: "#216D99"
+      },
+      area: {
+        gradientFrom: "#2e86de",
+        gradientFromOpacity: 1,
+        gradientTo: "#87D3FF",
+        gradientToOpacity: 1
+      },
+      yAxis: {
+        labelColor: "#c8d6e5"
+      },
+      grid: {
+        strokeColor: "#c8d6e5",
+        stepSize: 30
+      },
+      insetY: 10,
+      insetX: 10,
+      interpolation: "spline",
+      backgroundColor: "#fff"
+};
 
 export class App extends React.Component {
 
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      message: '',
-      messages: [],
-      add_count: 0
-    }
-    this.addit = this.addit.bind(this);
-    this.addItem = this.addItem.bind(this);
-  }
-//
-  componentDidMount() {
-
-  }
-
-  addItem () {
-    if (!this.state.message) return;
-
-    const newMessage = firebase.database().ref("messages")
-                     //     .child("messages")
-                          .push();
-    newMessage.set(this.state.message, () => this.setState({message: ''}))
-  }
-
-  addit () {
-  	let x = this.state.add_count;
-  	let y = addone(x);
-  	this.setState({add_count: y});
-  }
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <View style={styles.msgBox}>
-          <TextInput placeholder='Enter your message'
-            value={this.state.message}
-            onChangeText={(text) => this.setState({message: text})}
-            style={styles.txtInput}/>
-          <Button title='Send' onPress={this.addItem}/>
-        </View>
-        <FlatList data={this.state.messages}
-          renderItem={
-            ({item}) =>
-            <View style={styles.listItemContainer}>
-              <Text style={styles.listItem}>
-                {item}
-              </Text>
-              <Button
-                title="Go to DescriptionScreen"
-                onPress={() => {
-                  /* 1. Navigate to the Details route with params */
-                  this.props.navigation.navigate('DescriptionScreen', {
-                    title: item,
-                    otherParam: 'anything you want here',
-                  });
-                }}
-              />
+    render() {
+        return (
+            <View>
+                <LineChart style={{ flex: 1 }} config={config} data={data} />
             </View>
-          }
-          />
-        <View style={styles.halfo}>
-          <Text style={styles.finn}>
-                {this.state.add_count}
-          </Text>
-
-          <Button title='Add 1 (from external js file)' onPress={this.addit}/>
-        </View>
-      </View>
-    );
-  }
+        );
+    }
 }
 
 const styles = StyleSheet.create({
