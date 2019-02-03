@@ -5,7 +5,7 @@ import * as firebase from 'firebase';
 import { addone, getAllPosts, getSnapshot, sortPosts, signIn,allResponses, enterSleepyNess } from './test_functions.js';
 import Slider from "react-native-slider";
 import Icon from '@expo/vector-icons/FontAwesome';
-import { Divider, Header, Button } from 'react-native-elements';
+import { Divider, Header, Button, CheckBox } from 'react-native-elements';
 import PureChart from 'react-native-pure-chart';
 
 
@@ -198,8 +198,12 @@ class SubmissionScreen extends React.Component {
       this.state = {
         title: '',
         text: '',
-        height: 0
+        height: 0,
+        outdoors: false,
+        creative: false,
+        shock: false,
       }
+
     }
 
   render() {
@@ -245,7 +249,24 @@ class SubmissionScreen extends React.Component {
         </View>
         <Divider style={{ backgroundColor: 'gray' }}/>
         <Divider style={{ backgroundColor: 'gray' }}/>
-
+        <View style={{flex: 1, flexDirection: 'row'}}>
+          
+          <CheckBox
+            title='Outdoors'
+            checked={this.state.outdoors}
+            onPress={() => this.setState({outdoors: !this.state.outdoors})}
+          />
+          <CheckBox
+            title='Creative'
+            checked={this.state.creative}
+            onPress={() => this.setState({creative: !this.state.creative})}
+          />
+          <CheckBox
+            title='Shock'
+            checked={this.state.shock}
+            onPress={() => this.setState({shock: !this.state.shock})}
+          />
+        </View>
         <View style={{padding: 40, flexDirection: 'row', justifyContent: 'space-between'}}>
 
         </View>
@@ -507,11 +528,9 @@ class HomeScreen extends React.Component {
             renderItem={
               ({item}) =>
               <View style={styles.idea}>
-                <Text style={styles.listItem}>
-                  {item.title}
-                </Text>
+                
                 <Button
-                title=<Ionicons name="ios-list" size={25} color="black"/> 
+                title={item.title}
                 onPress={() => {
                   /* 1. Navigate to the Details route with params */
                   this.props.navigation.navigate('DescriptionScreen', {
@@ -682,12 +701,13 @@ const getTabBarIcon = (navigation, focused, tintColor) => {
 
 const HomeStack = createStackNavigator({
   Community: { screen: HomeScreen },
-  DescriptionScreen: { screen: DescriptionScreen },
+  
 });
 
 const HSStack = createStackNavigator({
   HS: { screen: HS },
   SubmissionScreen: { screen: SubmissionScreen },
+  DescriptionScreen: { screen: DescriptionScreen },
 });
 
 export default createAppContainer(
@@ -706,8 +726,9 @@ export default createAppContainer(
 
                       },
 
-      Community: { screen: HomeStack,
-                     navigationOptions: { tabBarVisible: true,
+      Community: { screen: HomeScreen, 
+                     navigationOptions: { tabBarVisible: true, 
+
                                      tabBarIcon: ({ tintColor }) => (
                                      <Icon
                                           name="home"
