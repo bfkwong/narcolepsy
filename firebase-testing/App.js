@@ -52,7 +52,7 @@ export class HS extends React.Component {
         return (
 
 
-            <ScrollView>
+            <View>
 
 
                 <Text style={HSStyles.nextPLapse}>
@@ -84,10 +84,9 @@ export class HS extends React.Component {
                     <Button
                       title="Submit"
                       type="Submit"
-                      onPress={this.submitSleep}
-                    />
+                      onPress={this.submitSleep}/>
                 </View>
-            </View>
+          </View>
         );
     }
 
@@ -225,7 +224,7 @@ class SubmissionScreen extends React.Component {
         <Divider style={{ backgroundColor: 'gray' }}/>
 
         <View style={{flex: 1, flexDirection: 'row'}}>
-          
+
           <CheckBox
             title='Outdoors'
             checked={this.state.outdoors}
@@ -517,7 +516,7 @@ class HomeScreen extends React.Component {
             renderItem={
               ({item}) =>
               <View style={styles.idea}>
-                
+
                 <Button
                 title={item.title}
                 onPress={() => {
@@ -538,7 +537,7 @@ class HomeScreen extends React.Component {
             }
         />
 
-        
+
 
       </View>
 
@@ -678,7 +677,7 @@ const getTabBarIcon = (navigation, focused, tintColor) => {
 
 const HomeStack = createStackNavigator({
   Community: { screen: HomeScreen },
-  
+
 });
 
 const HSStack = createStackNavigator({
@@ -703,8 +702,8 @@ export default createAppContainer(
 
                       },
 
-      Community: { screen: HomeScreen, 
-                     navigationOptions: { tabBarVisible: true, 
+      Community: { screen: HomeScreen,
+                     navigationOptions: { tabBarVisible: true,
 
                                      tabBarIcon: ({ tintColor }) => (
                                      <Icon
