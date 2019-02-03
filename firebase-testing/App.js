@@ -500,7 +500,7 @@ class HomeScreen extends React.Component {
                         onPress: () => {this.props.navigation.navigate('Community');},
                     }}
         />
-        <View style={styles.finn}>
+        <View style={styles.yeet}>
                   <Button
                 color = 'green'
                 title="Create a Nudge"
