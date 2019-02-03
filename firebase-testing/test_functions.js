@@ -108,3 +108,19 @@ export function signIn(email, password) {
     database = firebase.database();
     return true;
 }
+
+export function getGraphOutput() {
+    output = [];
+    range = [];
+
+    var newModel = new nPolynomialRegression();
+    newModel.fit(time, sleepiness, 10);
+
+    var max = Math.max(output);
+    range = [];
+    output = [];
+    for (var i = 0; i < 1440; i+=1) {
+        range.push(i/1440);
+        output.push(newModel.predict(i));
+
+}
