@@ -247,7 +247,7 @@ class DescriptionScreen extends React.Component {
 
     return (
 
-      <View style = {{ flex: 1,padding: 20, backgroundColor: '#808080', alignItems: 'center' }}>
+      <View style = {{ flex: 1, padding: 20, backgroundColor: '#808080', alignItems: 'center' }}>
       <View style = {{flexDirection: 'row',margin: 20, backgroundColor: 'gold',  textAlign: 'right',  color: 'white', fontSize: 25, fontWeight: 'bold', color: 'yellow' }}>
       <Text>{JSON.parse(JSON.stringify(rating))}</Text>
       </View>
