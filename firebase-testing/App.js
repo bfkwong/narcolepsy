@@ -44,21 +44,9 @@ export class HS extends React.Component {
         let sampleData = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 
         return (
+
             <ScrollView>
-                <Header
-                    style={{position: 'absolute', top: '0'}}
-                    /*leftComponent={{
-                        icon: 'menu',
-                        color: '#fff',
-                        onPress: () => {this.props.navigation.navigate('YEETGOD');},
-                    }}*/
-                    centerComponent={{ text: 'NUDGE', style: { fontSize: 28, fontWeight: 'bold', color: '#fff' } }}
-                    rightComponent={{
-                        icon: 'home',
-                        color: '#fff',
-                        onPress: () => {this.props.navigation.navigate('Community');},
-                    }}
-                />
+
                 <Text style={HSStyles.nextPLapse}>
                     NEXT PREDICTED LAPSE
                 </Text>
@@ -196,34 +184,22 @@ class SubmissionScreen extends React.Component {
         text: '',
         height: 0
       }
-    }
+      this.highlight = this.highlight.bind(this);
+  }
+
+  highlight () {
+
+  }
 
   render() {
     const { navigation } = this.props;
     const title = navigation.getParam('title', 'NO-ID');
     const rating = navigation.getParam('rating', '99');
     const description = navigation.getParam('description', 'TEST DESCRIPTION');
-    const catagories = navigation.getParam('catagories', [1,0,1]);
 
     return (
 
       <View>
-        <Header
-            style={{position: 'absolute', top: '0'}}
-            centerComponent={{
-                text: 'NUDGE',
-                style: {
-                    fontSize: 28,
-                    fontWeight: 'bold',
-                    color: '#fff'
-                }
-            }}
-            rightComponent={{
-                icon: 'home',
-                color: '#fff',
-                onPress: () => {this.props.navigation.navigate('Community');},
-            }}
-        />
 
         <Text style={{
                              textAlign: 'center',
@@ -242,7 +218,17 @@ class SubmissionScreen extends React.Component {
         <Divider style={{ backgroundColor: 'gray' }}/>
         <Divider style={{ backgroundColor: 'gray' }}/>
 
-        <View style={{padding: 40, flexDirection: 'row', justifyContent: 'space-between'}}>
+        <View style={{padding: 35, flexDirection: 'row', justifyContent: 'space-between'}}>
+
+            <View style={{  width: 45, height: 38, backgroundColor: 'red', margin:5, marginTop: 20, marginLeft: 20}}>
+                <Button  title="O" color = 'red'/>
+            </View>
+            <View style={{ width: 45, height: 38, backgroundColor: 'orange',margin: 5, marginTop:20, textAlign: 'center'}}>
+                <Button  title="I" color = 'orange'/>
+            </View>
+            <View style={{ width: 45, height: 38, backgroundColor: 'green',margin: 5, marginTop:20, marginRight: 20}}>
+                <Button  title="P" color = 'green'/>
+            </View>
 
         </View>
 
@@ -460,22 +446,21 @@ class HomeScreen extends React.Component {
 
     return (
       <View>
-
         <Header
-                    style={{position: 'absolute', top: '0'}}
-                    centerComponent={{
-                        text: 'NUDGE',
-                        style: {
-                            fontSize: 28,
-                            fontWeight: 'bold',
-                            color: '#fff'
-                        }
-                    }}
-                    rightComponent={{
-                        icon: 'home',
-                        color: '#fff',
-                        onPress: () => {this.props.navigation.navigate('Community');},
-                    }}
+          style={{position: 'absolute', top: '0'}}
+          centerComponent={{
+            text: 'NUDGE',
+            style: {
+              fontSize: 28,
+              fontWeight: 'bold',
+              color: '#fff'
+            }
+          }}
+          rightComponent={{
+            icon: 'home',
+            color: '#fff',
+            onPress: () => {this.props.navigation.navigate('Community');},
+          }}
         />
 
         <View style={styles.filterBox}>
@@ -498,7 +483,7 @@ class HomeScreen extends React.Component {
 
 
 
-        <FlatList data={this.state.messages} //normally data = this.state.messages
+        <FlatList data={this.state.messages}
             renderItem={
               ({item}) =>
               <View style={styles.idea}>
@@ -608,23 +593,6 @@ class DescriptionScreen extends React.Component {
     return (
 
       <View style = {{ flex: 1, padding: 20, backgroundColor: '#808080',alignItems:'center' }}>
-
-      <Header
-                  style={{position: 'absolute', top: '0'}}
-                  centerComponent={{
-                      text: 'NUDGE',
-                      style: {
-                          fontSize: 28,
-                          fontWeight: 'bold',
-                          color: '#fff'
-                      }
-                  }}
-                  rightComponent={{
-                      icon: 'home',
-                      color: '#fff',
-                      onPress: () => {this.props.navigation.navigate('Community');},
-                  }}
-      />
 
       <Text style = {{backgroundColor: 'gold',fontSize: 25, alignSelf: 'flex-end',textAlign: 'right'}}>{JSON.parse(JSON.stringify(rating))}</Text>
 
