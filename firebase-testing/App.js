@@ -1,8 +1,14 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, Button, FlatList } from 'react-native';
+import { ActivityIndicator, Dimensions, AppRegistry, ScrollView, StyleSheet, Text, View, TextInput, Button, FlatList } from 'react-native';
+import { Header, Divider, Image } from 'react-native-elements';
 import {Constants} from 'expo';
 import * as firebase from 'firebase';
 import { addone, getAllPosts, getSnapshot, sortPosts, signIn } from './test_functions.js';
+
+import Modal from 'react-native-modalbox';
+import Slider from 'react-native-slider';
+
+  var screen = Dimensions.get('window');
 
   console.disableYellowBox = true;
 
@@ -116,6 +122,11 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#fff'
   },
+  bigChungus: {
+    flexDirection: 'row',
+    padding: 60,
+    backgroundColor: '#fff'
+  },
   filterBox: {
     flexDirection: 'row',
     backgroundColor: '#4286f4',
@@ -144,7 +155,51 @@ const styles = StyleSheet.create({
   listItem: {
     fontSize: 20,
     padding: 10
-  }
+  },
+  wrapper: {
+      paddingTop: 50,
+      flex: 1
+    },
+
+    modal: {
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+
+    modal2: {
+      height: 230,
+      backgroundColor: "#3B5998"
+    },
+
+    modal3: {
+      height: 300,
+      width: 300
+    },
+
+    modal4: {
+      height: 300
+    },
+
+    btn: {
+      margin: 10,
+      backgroundColor: "#3B5998",
+      color: "white",
+      padding: 10
+    },
+
+    btnModal: {
+      position: "absolute",
+      top: 0,
+      right: 0,
+      width: 50,
+      height: 50,
+      backgroundColor: "transparent"
+    },
+
+    text: {
+      color: "black",
+      fontSize: 22
+    }
 });
 
 
@@ -180,6 +235,12 @@ class HomeScreen extends React.Component {
     return (
       <View style={styles.container}>
 
+        <Header
+                  leftComponent={{ icon: 'menu', color: '#fff' }}
+                  centerComponent={{ text: 'NUDGE', style: { fontSize: 28, fontWeight: 'bold', color: '#fff' } }}
+                  rightComponent={{ icon: 'home', color: '#fff' }}
+        />
+
         <View style={styles.filterBox}>
             <Text style={{color: 'white', fontSize: 25, fontWeight: 'bold', padding: 20}}>
             Filter by:
@@ -187,9 +248,7 @@ class HomeScreen extends React.Component {
             <View style={{width: 30, height: 30, backgroundColor: 'red', textAlign: 'center'}}/>
         </View>
 
-
-
-        <FlatList data={this.state.messages} //normally data = this.state.messages
+        <FlatList data={this.state.messages}
             renderItem={
               ({item}) =>
               <View style={styles.idea}>
@@ -204,15 +263,7 @@ class HomeScreen extends React.Component {
         />
 
         <View style={styles.msgBox}>
-                  <TextInput placeholder='Enter Idea'
-                    /*value={this.state.message}
-
-                    Potential here for onPress to switch UIs
-                    or to expand the bar upwards
-
-                    onChangeText={(text) => this.setState({message: text})}*/
-                    style={styles.txtInput}/>
-                  <Button title='Send' /*onPress={this.addItem}*//>
+                  <Button title='Create Your Own Idea' onPress={this.addItem}/>
                 </View>
 
       </View>
@@ -238,6 +289,65 @@ class DescriptionScreen extends React.Component {
         <Text>Description: {JSON.parse(JSON.stringify(description))}</Text>
         <Text>Catagories: {JSON.parse(JSON.stringify(catagories))}</Text>
 
+      </View>
+
+    );
+  }
+}
+
+class SubmissionScreen extends React.Component {
+
+  constructor(props) {
+      super(props)
+
+      this.state = {
+        title: '',
+        text: '',
+        height: 0
+      }
+    }
+
+  render() {
+    const { navigation } = this.props;
+    const title = navigation.getParam('title', 'NO-ID');
+    const rating = navigation.getParam('rating', '99');
+    const description = navigation.getParam('description', 'TEST DESCRIPTION');
+    const catagories = navigation.getParam('catagories', [1,0,1]);
+
+    return (
+
+      <View>
+        <Header
+          leftComponent={{ icon: 'menu', color: '#fff' }}
+          centerComponent={{ text: 'NUDGE', style: { fontSize: 28, fontWeight: 'bold', color: '#fff' } }}
+          rightComponent={{ icon: 'home', color: '#fff' }}
+        />
+
+        <View style={styles.msgBox}>
+          <TextInput style={{}} placeholder='Enter a Title'
+            value={this.state.title}
+            onChangeText={(message) => this.setState({title: message})}
+            style={styles.txtInput}/>
+        </View>
+        <Divider style={{ backgroundColor: 'gray' }}/>
+        <Divider style={{ backgroundColor: 'gray' }}/>
+
+        <View style={{padding: 40, flexDirection: 'row', justifyContent: 'space-between'}}>
+
+        </View>
+
+        <Divider style={{ backgroundColor: 'gray' }}/>
+        <Divider style={{ backgroundColor: 'gray' }}/>
+        <View style={styles.msgBox}>
+          <TextInput
+            placeholder='Enter your message'
+            multiline={true}
+            value={this.state.text}
+            onChangeText={(message) => this.setState({text: message})}
+            style={styles.txtInput}/>
+
+        </View>
+        <Button title='SUBMIT' onPress={this.addItem}/>
       </View>
 
     );
@@ -306,7 +416,7 @@ export default createAppContainer(
     {
       App: { screen: App },
       Home: { screen: HomeStack },
-
+      SubmissionScreen: { screen: SubmissionScreen },
     },
     {
       defaultNavigationOptions: ({ navigation }) => ({
