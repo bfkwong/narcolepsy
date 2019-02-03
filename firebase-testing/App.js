@@ -387,7 +387,20 @@ const styles = StyleSheet.create({
   listItem: {
     fontSize: 20,
     padding: 10
-  }
+  },
+  input: {
+    width: 200,
+    height: 44,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: 'black',
+    marginBottom: 10,
+  },
+  logincontainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+  },
 });
 
 
@@ -479,10 +492,61 @@ class HomeScreen extends React.Component {
   }
 }
 
+export class LoginScreen extends React.Component {
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      username: '',
+      password: '',
+    }
+
+  }
+
+  
+
+  render() {
+    return (
+      <View style={styles.container}>
+        
+          <View style={styles.logincontainer}>
+                <TextInput
+                  value={this.state.username}
+                  onChangeText={(username) => this.setState({ username })}
+                  placeholder={'Username'}
+                  style={styles.input}
+                />
+                <TextInput
+                  value={this.state.password}
+                  onChangeText={(password) => this.setState({ password })}
+                  placeholder={'Password'}
+                  secureTextEntry={true}
+                  style={styles.input}
+                />
+                
+                
+              <Button
+                title="Log In"
+                onPress={() => {
+                  /* 1. Navigate to the Details route with params */
+                  this.props.navigation.navigate('Home', {
+                    username: this.state.username,
+                    password: this.state.password,
+                  });
+                }}
+              />
+          </View>  
+        
+      </View>
+    );
+  }
+}
+
 class DescriptionScreen extends React.Component {
   render() {
     const { navigation } = this.props;
-    const title = navigation.getParam('title', 'NO-ID');
+    const title = navigation.getParam('username', 'NO-ID');
     const rating = navigation.getParam('rating', '99');
     const description = navigation.getParam('description', 'TEST DESCRIPTION');
     const catagories = navigation.getParam('catagories', [1,0,1]);
@@ -537,21 +601,16 @@ class IconWithBadge extends React.Component {
   }
 }
 
-const HomeIconWithBadge = props => {
-  // You should pass down the badgeCount in some other ways like context, redux, mobx or event emitters.
-  return <IconWithBadge {...props} badgeCount={3} />;
-};
-
+import Icon from '@expo/vector-icons/FontAwesome';
 const getTabBarIcon = (navigation, focused, tintColor) => {
   const { routeName } = navigation.state;
   let IconComponent = Ionicons;
   let iconName;
   if (routeName === 'Home') {
-    iconName = `ios-information-circle${focused ? '' : '-outline'}`;
-    // We want to add badges to home tab icon
-    IconComponent = HomeIconWithBadge;
-  } else if (routeName === 'Settings') {
-    iconName = `ios-options${focused ? '' : '-outline'}`;
+    iconName = `ios-home${focused ? '' : '-outline'}`;
+
+  } else if (routeName === 'SwitchAccount') {
+    iconName = `ios-arrow-back${focused ? '' : '-outline'}`;
   }
 
   // You can return any component that you like here!
@@ -566,9 +625,33 @@ const HomeStack = createStackNavigator({
 export default createAppContainer(
   createBottomTabNavigator(
     {
-      App: { screen: App },
-      HomeScreen: {screen: HS},
-      Community: {screen: SubmissionScreen}
+
+      SwitchAccount: { screen: LoginScreen, 
+                     navigationOptions: { tabBarVisible: false, 
+                                     tabBarIcon: ({ tintColor }) => (
+                                     <Icon
+                                          name="refresh"
+                                          color={tintColor}
+                                          size={24}
+                                      />
+      )}
+
+                      },
+
+      Home: { screen: HomeStack, 
+                     navigationOptions: { tabBarVisible: true, 
+                                     tabBarIcon: ({ tintColor }) => (
+                                     <Icon
+                                          name="home"
+                                          color={tintColor}
+                                          size={24}
+                                      />
+      )}
+
+                       },
+      
+//
+
     },
     {
       defaultNavigationOptions: ({ navigation }) => ({
