@@ -93,7 +93,7 @@ export class App extends React.Component {
                 {item}
               </Text>
               <Button
-                title="Go to DescriptionScreen"
+                title="Full description"
                 onPress={() => {
                   /* 1. Navigate to the Details route with params */
                   this.props.navigation.navigate('DescriptionScreen', {
@@ -201,8 +201,11 @@ class HomeScreen extends React.Component {
             <Text style={{color: 'white', fontSize: 25, fontWeight: 'bold', padding: 20}}>
             Filter by:
             </Text>
-            <View style={{width: 30, height: 30, backgroundColor: 'red', textAlign: 'center'}}/>
-        </View>
+            <View style={{ padding: 10, width: 30, height: 30, backgroundColor: 'red',margin:10, marginTop: 25}}/>
+            <View style={{padding:10, width: 30, height: 30, backgroundColor: 'orange',margin: 10, marginTop:25, textAlign: 'center'}}/>
+            <View style={{padding:10, width: 30, height: 30, backgroundColor: 'green',margin: 10, marginTop:25, textAlign: 'center'}}/>
+            <View style={{padding:10, width: 30, height: 30, backgroundColor: 'purple',margin: 10, marginTop:25, textAlign: 'center'}}/>
+    </View>
 
         <FlatList data={["Poop", "Poop the Sequel",
                             "Poop: Origins", "Poop: Final Frontier"]} //normally data = this.state.messages
