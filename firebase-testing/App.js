@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, ScrollView, TextInput, FlatList, Dimensions, Al
 import {Constants} from 'expo';
 import * as firebase from 'firebase';
 
-import { addone, getAllPosts, getSnapshot, sortPosts, signIn,allResponses, enterSleepyNess, sampleData, result, max } from './test_functions.js';
+import { submitCommunityPost, addone, getAllPosts, getSnapshot, sortPosts, signIn,allResponses, enterSleepyNess, sampleData, result, max } from './test_functions.js';
 
 import Slider from "react-native-slider";
 import Icon from '@expo/vector-icons/FontAwesome';
@@ -604,7 +604,7 @@ class DescriptionScreen extends React.Component {
     }
     this.halfsend = this.halfsend.bind(this);
   }
-  halfsend () {
+  halfsend (title,description, author, catagories) {
       this.setState({rating: this.state.rating+1});
       console.log(this.state.rating);
       submitCommunityPost(title, this.state.rating, description, author, catagories);
@@ -624,7 +624,7 @@ class DescriptionScreen extends React.Component {
       <View style = {{flexDirection: 'row', backgroundColor: 'gold',fontSize: 25,textAlign: 'right', alignSelf: 'flex-end'}}>
       <Button
       title = <Ionicons name="ios-arrow-up" size={25} color="black"/>
-      onPress = {this.halfsend}/>
+      onPress ={() => this.halfsend(title,description, author, catagories)}/>
       <Ionicons name="ios-star" size={25} color="black"/>
       <Text style = {{fontSize:25}}>{(JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(rating))+this.state.rating)))}</Text>
       </View>
