@@ -356,7 +356,9 @@ const styles = StyleSheet.create({
   msgBox: {
     flexDirection: 'row',
     padding: 20,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    textAlign: 'center',
+    justifyContent: "center",
   },
   filterBox: {
     flexDirection: 'row',
@@ -487,15 +489,18 @@ class HomeScreen extends React.Component {
         />
 
         <View style={styles.msgBox}>
-                  <TextInput placeholder='Enter Idea'
-                    /*value={this.state.message}
+                  <Button
+                color = 'green'
+                title="Create a Nudge"
+                onPress={() => {
+                  /* 1. Navigate to the Details route with params */
+                  this.props.navigation.navigate('SubmissionScreen', {
+                    username: "sdfsdf",
+                    password: "sdfsd",
+                  });
+                }}
+              />
 
-                    Potential here for onPress to switch UIs
-                    or to expand the bar upwards
-
-                    onChangeText={(text) => this.setState({message: text})}*/
-                    style={styles.txtInput}/>
-                  <Button title='Send' /*onPress={this.addItem}*//>
                 </View>
 
       </View>
@@ -634,6 +639,11 @@ const HomeStack = createStackNavigator({
   DescriptionScreen: { screen: DescriptionScreen },
 });
 
+const HSStack = createStackNavigator({
+  HS: { screen: HS },
+  SubmissionScreen: { screen: SubmissionScreen },
+});
+
 export default createAppContainer(
   createBottomTabNavigator(
     {
@@ -661,7 +671,7 @@ export default createAppContainer(
       )}
 
                        },
-      MyNudge: { screen: HS, 
+      MyNudge: { screen: HSStack, 
                      navigationOptions: { tabBarVisible: true, 
                                      tabBarIcon: ({ tintColor }) => (
                                      <Icon
