@@ -15,11 +15,10 @@
 -We wanted to make an app that keeps them from feeling sleepy.
 
 ###### What it does
--Has a User sourced/ crowdsourced To-do list page of tips and tricks from other narcolepsy.  
--Provides a graph of “sleepiness” trends created from machine learning during the day/sleepiness predictiveness
--Keeps track of daily activities to determine graph
+-Has a User sourced/ crowdsourced To-do list page of tips and tricks from other people with narcolepsy.  
+-Provides a graph of “sleepiness” trends created from machine learning during the day/sleepiness predictiveness and keeps track of daily activities to determine graph
 ###### How we built it
--React Native and Machine Learning with a Firebase database
+-React Native and Machine Learning with a Firebase database (Real-time Cloud Storage)
 ###### Challenges we ran into
 -Learning Javascript, implementing machine learning, syncing with the database
 ###### Accomplishments that we're proud of
