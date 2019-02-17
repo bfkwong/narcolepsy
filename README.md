@@ -2,8 +2,7 @@
 
 ### Created by: Finn Childres, Bryan Kwong, William Hickman, and Nicholas Sheffler 
 
-### Devpost Link: https://devpost.com/software/nudge-md67h8/edit
-
+### Devpost Link: https://www.youtube.com/watch?v=Y_tztvsGIHw
 
 #### Welcome to Nudge!
 
