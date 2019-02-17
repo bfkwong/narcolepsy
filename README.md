@@ -2,7 +2,7 @@
 
 ### Created by: Finn Childres, Bryan Kwong, William Hickman, and Nicholas Sheffler 
 
-### Devpost Link: https://www.youtube.com/watch?v=Y_tztvsGIHw
+### Demo Link: https://www.youtube.com/watch?v=Y_tztvsGIHw
 
 #### Welcome to Nudge!
 
